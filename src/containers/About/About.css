@@ -1,0 +1,192 @@
+.about-section {
+  background: radial-gradient(
+      50% 50% at 50% 50%,
+      rgba(26, 21, 21, 0) 0%,
+      rgba(1, 1, 1, 0.16) 100%
+    ),
+    #ffffff;
+  mix-blend-mode: normal;
+}
+
+.about-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 70px 0;
+}
+
+.about-header h2 {
+  text-align: center;
+  font-family: "Montserrat", sans-serif;
+  font-size: 20px;
+  letter-spacing: 0.35538em;
+  box-sizing: border-box;
+  border: 4px solid #000;
+  padding: 10px 15px 10px 15px;
+}
+
+.about-intro {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.about-intro-text {
+  text-align: center;
+  margin-top: 30px;
+  font-family: "Open Sans", sans-serif;
+  font-size: 18px;
+  line-height: 138.68%;
+  color: #050505;
+  padding: 0 20px;
+}
+
+.explore {
+  font-family: "Montserrat", sans-serif;
+  font-size: 15px;
+  border-left: 2px solid #000;
+  border-right: 2px solid #000;
+  text-align: center;
+  padding: 0 20px;
+  margin-top: 60px;
+}
+
+.blackline {
+  width: 170px;
+  height: 12px;
+  margin: 60px 0;
+}
+
+.services-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 50px;
+}
+
+.about-services {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 20px 0;
+}
+
+.about-services h3 {
+  font-family: "Montserrat", sans-serif;
+  font-size: 22px;
+  letter-spacing: 0.18538em;
+  line-height: 27px;
+}
+
+.about-services p {
+  font-family: "Open Sans", sans-serif;
+  font-size: 14px;
+  text-align: justify;
+}
+
+.dev-services {
+  padding: 30px 0;
+}
+
+.dev-services-title {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.dev-services-title h3 {
+  margin-left: -20px;
+  margin-top: 8px;
+}
+
+.dev-text {
+  margin-left: 50px;
+  word-wrap: break-word;
+}
+
+.maint-services {
+  margin-left: 40px;
+  padding: 30px 0;
+}
+
+.maint-text {
+  margin-left: 60px;
+  word-wrap: break-word;
+}
+
+.maint-services-title {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.maint-services-title h3 {
+  margin-left: -20px;
+  margin-top: 10px;
+}
+
+.separator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media screen and (max-width: 1000px) {
+  .about-header h2 {
+    font-size: 14px;
+    padding: 10px 20px;
+  }
+
+  .services-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .about-services {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 20px;
+  }
+
+  .maint-services {
+    margin: 0;
+  }
+
+  .dev-text {
+    padding-right: 20px;
+  }
+
+  .maint-text {
+    padding-right: 20px;
+  }
+}
+
+@media screen and (max-width: 350px) {
+  .about-services {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 10px;
+  }
+
+  .about-services h3 {
+    font-size: 14px;
+    margin-left: -20px;
+  }
+
+  .about-services img {
+    width: 50px;
+  }
+
+  .dev-text {
+    margin-left: 30px;
+    padding-right: 15px;
+  }
+
+  .maint-text {
+    margin-left: 30px;
+    padding-right: 15px;
+  }
+}

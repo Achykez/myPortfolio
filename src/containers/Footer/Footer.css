@@ -1,0 +1,43 @@
+.footer-section {
+  background: #1a1a1a;
+}
+
+.top-nav {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.top-nav a {
+  text-decoration: none;
+  padding: 5px;
+  font-family: "Montserrat", sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 18px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  letter-spacing: 0.18538em;
+  color: #ffffff;
+}
+
+.copyrights {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.copyrights p {
+    padding: 10px 5px 50px 5px;
+    color: #ffffff;
+    font-family: "Nunito", sans-serif;
+    font-size: 18px;
+}
+
+.rights {
+    font-weight: 300;
+}
