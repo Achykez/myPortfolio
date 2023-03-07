@@ -1,24 +1,22 @@
 import React from "react";
-import "./App.css";
-import {
-  About,
-  Hero,
-  Contact,
-  Footer,
-  ItBerries,
-  Portfolio,
-} from "./containers";
+import { ThemeProvider } from "styled-components";
+import { MainBody, Container } from "./styles/Global.styled";
+import { theme } from "./utils/Theme";
+
+// components
+import ShowCase from "./components/ShowCase";
+
 
 function App() {
   return (
-    <div className="App">
-      <Hero />
-      <ItBerries />
-      <About />
-      <Portfolio />
-      <Contact />
-      <Footer />
-    </div>
+    <ThemeProvider theme={theme}>
+      <MainBody>
+        <Container>
+        <ShowCase></ShowCase>
+
+        </Container>
+      </MainBody>
+    </ThemeProvider>
   );
 }
 
