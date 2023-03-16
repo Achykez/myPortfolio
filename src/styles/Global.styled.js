@@ -1,8 +1,7 @@
 import styled from "styled-components";
 
 export const MainBody = styled.div`
-  background-color: ${({ theme }) =>
-    theme.colors.primary}; 
+  background-color: ${({ theme }) => theme.colors.primary};
 `;
 
 export const Container = styled.div`
@@ -12,33 +11,25 @@ export const Container = styled.div`
 `;
 export const PaddingContainer = styled.div`
   padding-top: ${({ top }) => top};
-  padding-bottom: ${({ bottom }) =>
-    bottom};
+  padding-bottom: ${({ bottom }) => bottom};
   padding-left: ${({ left }) => left};
-  padding-right: ${({ right }) =>
-    right};
+  padding-right: ${({ right }) => right};
 `;
 
 export const FlexContainer = styled.div`
   display: flex;
-  justify-content: ${({ justify }) =>
-    justify};
+  justify-content: ${({ justify }) => justify};
   align-items: ${({ align }) => align};
   gap: ${({ gap }) => gap};
-  flex-direction: ${({ direction }) =>
-    direction};
+  flex-direction: ${({ direction }) => direction};
 
   & > div {
-    flex: ${({ fullWidthChild }) =>
-      fullWidthChild && 1};
+    flex: ${({ fullWidthChild }) => fullWidthChild && 1};
   }
 `;
 
-export const Heading = styled(
-  PaddingContainer
-)`
-  color: ${({ theme }) =>
-    theme.colors.white};
+export const Heading = styled(PaddingContainer)`
+  color: ${({ theme }) => theme.colors.white};
   text-align: ${({ align }) => align};
   font-size: ${({ size }) => {
     switch (size) {
@@ -59,27 +50,26 @@ export const Heading = styled(
     }
   }};
 `;
-export const BlueText = styled.span` 
-    color: ${({theme}) => theme.colors.secondary};
-`
+export const BlueText = styled.span`
+  color: ${({ theme }) => theme.colors.secondary};
+`;
 export const ParaText = styled(PaddingContainer)`
-    color: ${({theme}) => theme.colors.para_text_color};
-    line-height: 2rem;
-`
+  color: ${({ theme }) => theme.colors.para_text_color};
+  line-height: 2rem;
+`;
 export const IconContainer = styled.div`
-    font-size: ${({size}) => size};
-    cursor: pointer;
-    color: ${({color, theme}) => {
-        switch  (color ) {
-            case 'white':  
-                return theme.colors.white;
+  font-size: ${({ size }) => size};
+  cursor: pointer;
+  color: ${({ color, theme }) => {
+    switch (color) {
+      case "white":
+        return theme.colors.white;
 
-            case 'blue': 
-                return theme.colors.secondary;
-                
-            default: return;    
+      case "blue":
+        return theme.colors.secondary;
 
-        }
-    }}
-
-`
+      default:
+        return;
+    }
+  }};
+`;

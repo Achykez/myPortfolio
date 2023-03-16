@@ -5,6 +5,7 @@ import { theme } from "./utils/Theme";
 
 // components
 import ShowCase from "./components/ShowCase";
+import MySkills from "./components/MySkills";
 
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
       <MainBody>
         <Container>
         <ShowCase></ShowCase>
+        <MySkills />
 
         </Container>
       </MainBody>

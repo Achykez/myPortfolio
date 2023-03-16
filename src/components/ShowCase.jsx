@@ -10,8 +10,10 @@ import {
 } from "../styles/Global.styled";
 import { genesys } from "../utils/experience";
 import { BsInstagram, BsFacebook, BsTwitter, BsYoutube } from "react-icons/bs";
-import { ShowCaseParticleContainer, ShowImageCard } from "../styles/Showcase.styled";
+import { ShowCaseParticleContainer, ShowImageCard, Particle } from "../styles/Showcase.styled";
 import codeBlue from "../assets/codeblue.JPG"
+import BackParticle  from "../assets/particle.png"
+
 
 const ShowCase = () => {
   return (
@@ -20,13 +22,13 @@ const ShowCase = () => {
         {/* ----Left-content---- */}
         <div>
           <Heading as="h4" size="h4">
-            SALUT
+            Hello
           </Heading>
           <Heading as="h1" size="h1" top="0.5rem" bottom="0.5rem">
-            Ich Bin <BlueText>Achike Chude</BlueText>
+            My name is <BlueText>Achike Chude</BlueText>
           </Heading>
           <Heading size="h3" as="h3">
-            Ich Bin ein <BlueText>Frontend Developer</BlueText>
+            I am a  <BlueText>Frontend Developer</BlueText>
           </Heading>
 
           <ParaText as="p" top="2rem" bottom="4rem">
@@ -57,6 +59,28 @@ const ShowCase = () => {
             <ShowImageCard>
                 <img src={codeBlue} alt="image" />
             </ShowImageCard>
+            <Particle
+              src={BackParticle}
+              alt="back"
+              top="-70px"
+              left="20px"
+              rotate="60deg"
+            />
+            <Particle
+              src={BackParticle}
+              alt="back"
+              top="70px"
+              right="-70px"
+              rotate="0deg"
+            />
+            <Particle
+              src={BackParticle}
+              alt="back"
+              bottom="10px"
+              left="-60px"
+              rotate="50deg"
+            />
+          
           </ShowCaseParticleContainer>
         </FlexContainer>
       </FlexContainer>

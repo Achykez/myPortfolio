@@ -8,9 +8,17 @@ export const ShowCaseParticleContainer = styled.div`
 export const ShowImageCard = styled.div`
     border: 1px solid #0f172a;
     width: max-content;
-    padding-top: 2rem;
+    padding-bottom: 0rem;
     border-radius: 1rem;
     position: relative;
     overflow: hidden;
     
+`
+export const Particle = styled.img`
+    position: absolute;
+    top: ${({top}) => top};
+    left: ${({left}) => left};
+    right: ${({right}) => right};
+    bottom: ${({bottom}) => bottom};
+    transform: rotate(${({rotate}) => rotate});
 `
