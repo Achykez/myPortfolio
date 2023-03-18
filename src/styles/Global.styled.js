@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { lightTheme, darkTheme } from "../App";
 
 export const MainBody = styled.div`
   background-color: ${({ theme }) => theme.colors.primary};
@@ -29,7 +30,7 @@ export const FlexContainer = styled.div`
 `;
 
 export const Heading = styled(PaddingContainer)`
-  color: ${({ theme }) => theme.colors.white};
+  color: ${({ theme }) => theme.colors.text1};
   text-align: ${({ align }) => align};
   font-size: ${({ size }) => {
     switch (size) {
@@ -63,7 +64,7 @@ export const IconContainer = styled.div`
   color: ${({ color, theme }) => {
     switch (color) {
       case "white":
-        return theme.colors.white;
+        return theme.colors.text1;
 
       case "blue":
         return theme.colors.secondary;

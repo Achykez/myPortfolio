@@ -10,10 +10,14 @@ import {
 } from "../styles/Global.styled";
 import { genesys } from "../utils/experience";
 import { BsInstagram, BsFacebook, BsTwitter, BsYoutube } from "react-icons/bs";
-import { ShowCaseParticleContainer, ShowImageCard, Particle } from "../styles/Showcase.styled";
-import codeBlue from "../assets/codeblue.JPG"
-import BackParticle  from "../assets/particle.png"
-
+import {
+  ShowCaseParticleContainer,
+  ShowImageCard,
+  Particle,
+} from "../styles/Showcase.styled";
+import codeBlue from "../assets/codeblue.JPG";
+import BackParticle from "../assets/particle.png";
+import { Clock } from "../utils/Clock";
 
 const ShowCase = () => {
   return (
@@ -28,13 +32,14 @@ const ShowCase = () => {
             My name is <BlueText>Achike Chude</BlueText>
           </Heading>
           <Heading size="h3" as="h3">
-            I am a  <BlueText>Frontend Developer</BlueText>
+            I am a <BlueText>Frontend Developer</BlueText>
           </Heading>
 
           <ParaText as="p" top="2rem" bottom="4rem">
             Hello There , my name is Achike Chude and I'm a FrontEnd Developer
-            with {genesys.years} years and {genesys.months} months of experience
-            in creating user friendly websites and web applications
+            with {genesys.years} years and {genesys.months} months of experience in creating
+            user friendly websites and web applications. My experience has grown
+            since <Clock />.
           </ParaText>
 
           {/* ----social-icons----  */}
@@ -57,7 +62,7 @@ const ShowCase = () => {
         <FlexContainer justify="flex-end">
           <ShowCaseParticleContainer>
             <ShowImageCard>
-                <img src={codeBlue} alt="image" />
+              <img src={codeBlue} alt="image" />
             </ShowImageCard>
             <Particle
               src={BackParticle}
@@ -80,7 +85,6 @@ const ShowCase = () => {
               left="-60px"
               rotate="50deg"
             />
-          
           </ShowCaseParticleContainer>
         </FlexContainer>
       </FlexContainer>

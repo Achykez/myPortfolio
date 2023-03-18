@@ -6,7 +6,7 @@ export const ShowCaseParticleContainer = styled.div`
 `
 
 export const ShowImageCard = styled.div`
-    border: 1px solid #0f172a;
+    border: 1px solid ${({theme}) => theme.colors.text2};
     width: max-content;
     padding-bottom: 0rem;
     border-radius: 1rem;
