@@ -31,6 +31,8 @@ export const FlexContainer = styled.div`
 
 export const Heading = styled(PaddingContainer)`
   color: ${({ theme }) => theme.colors.text1};
+  font-family: "Josefin Sans", sans-serif;
+  
   text-align: ${({ align }) => align};
   font-size: ${({ size }) => {
     switch (size) {
