@@ -5,6 +5,7 @@ import { MainBody, Container } from "./styles/Global.styled";
 // components
 import ShowCase from "./components/ShowCase";
 import MySkills from "./components/MySkills";
+import { MyProjects } from "./components/MyProjects";
 
 export const lightTheme = {
   colors: {
@@ -90,6 +91,7 @@ function App() {
         <Container>
           <ShowCase />
           <MySkills />
+          <MyProjects />
         </Container>
       </MainBody>
     </ThemeProvider>

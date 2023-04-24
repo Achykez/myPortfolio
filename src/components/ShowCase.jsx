@@ -37,9 +37,11 @@ const ShowCase = () => {
 
           <ParaText as="p" top="2rem" bottom="4rem">
             Hello There , my name is Achike Chude and I'm a FrontEnd Developer
-            with {genesys.years} years and {genesys.months} months of experience in creating
-            user friendly websites and web applications. My experience has grown
-            since <Clock />.
+            with
+            {genesys.years > 0 ? `${genesys.years} years and` : null}{" "}
+            {genesys.months} months of experience in creating user friendly
+            websites and web applications. My experience has grown since{" "}
+            <Clock />.
           </ParaText>
 
           {/* ----social-icons----  */}
