@@ -19,8 +19,9 @@ export const MyProjects = () => {
         <PaddingContainer
             top="5rem"
             bottom="5rem"
+            key={project.id}
         >
-            <Project />
+            <Project data={project} />
         </PaddingContainer>
       ))}
     </PaddingContainer>

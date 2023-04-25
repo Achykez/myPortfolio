@@ -11,12 +11,14 @@ export const lightTheme = {
   colors: {
     primary: "#f2f5fc",
     primary_light: "#131c31",
-    secondary: "#0e1cb8",
+    secondary: "#1325e1",
+    button_hover: "#588ce4",
     text1: "#0e1cb8",
     text2: "#fff",
     para_text_color: "#292828",
     tertiary: "#131c31",
     stick: "#131c31",
+    paranormal: "#e9e1e1",  
   },
   fonts: {
     family: "DM sans",
@@ -36,11 +38,14 @@ export const darkTheme = {
     primary: "#131c31",
     primary_light: "#0f172a",
     secondary: "#7eadfc",
+    button_hover: "#fff",
     text1: "#fff",
     text2: "#000",
     para_text_color: "#dcdcdc",
     tertiary: "#131c31",
-    stick: "#fff"
+    stick: "#fff",
+    paranormal: "#e9e1e1",
+
   },
   fonts: {
     family: "DM sans",
