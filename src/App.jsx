@@ -1,8 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled, { ThemeProvider } from "styled-components";
-// import { MainBody, Container } from "./styles/Global.styled";
-
-// components
 import ShowCase from "./components/ShowCase";
 import MySkills from "./components/MySkills";
 import { MyProjects } from "./components/MyProjects";
@@ -104,25 +101,26 @@ function App() {
               {/* <Button type="toggle" onClick={toggleTheme}>
                 {isDarkMode ? "Light Theme" : "Dark Theme"}
               </Button> */}
-              <SwitchContainer>
-                {/* <SwitchLabel>Dark</SwitchLabel> */}
-                <ReactSwitch
+              
+            </NavBar>
+            <SwitchContainer>
+              <ReactSwitch
                   checked={isDarkMode}
                   onChange={toggleTheme}
                   height={30}
                   width={60}
                   handleDiameter={28}
-                  uncheckedIcon={false}
-                  checkedIcon={false}
-                  offColor="#000"
+                  uncheckedIcon={<span style={{display: 'flex',fontSize: '20px', color:"aliceblue",  justifyContent: 'center'}}>☽</span>}
+                  checkedIcon={<span style={{display: 'flex', fontSize: '20px', color:"aliceblue",  justifyContent: 'center'}}>✺</span>}
+                  offColor="transparent"
                   onColor="#000"
+    
                 />
-                {/* <SwitchLabel>Light</SwitchLabel> */}
               </SwitchContainer>
-            </NavBar>
             <Container>
               <ShowCase />
               <MySkills />
+              
               <MyProjects />
               <Footer />
             </Container>
@@ -160,6 +158,7 @@ const NavBar = styled.div`
   width: 100%;
   height: 80px;
   background-color: ${({ theme }) => theme.colors.tertiary};
+  transition: all 0.3s ease-in;
   top: 0;
   border-bottom: 1px solid ${({ theme }) => theme.colors.stick};
 `;
@@ -179,13 +178,27 @@ export const Container = styled.div`
   }
 `;
 const SwitchContainer = styled.div`
+   position: fixed;
   display: flex;
+  margin: auto;
   align-items: center;
-  margin-left: 15px;
+  justify-content: flex-end;
+  background-color: ${({theme}) => theme.colors.button_hover};
+  margin-top: 12px;
+  margin-left: 8px;
+  border-radius: 10px;
+  padding: 10px;
+  opacity: 0.3;
+  transition: opacity 0.3s ease-in-out;
+  z-index: 9999;
+  cursor: move;
+  left: 10;
+
+  &:hover {
+    opacity: 1;
+  }
 `;
 
-const SwitchLabel = styled.label`
-  margin-right: 10px;
-`;
+
 
 export default App;
