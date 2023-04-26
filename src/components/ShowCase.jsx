@@ -21,7 +21,7 @@ import { Clock } from "../utils/Clock";
 
 const ShowCase = () => {
   return (
-    <PaddingContainer id="Home" left="3%" right="10%" top="15%" bottom="10%">
+    <PaddingContainer id="Home" left="3%" right="10%" top="8%" bottom="10%">
       <FlexContainer align="center" fullWidthChild>
         {/* ----Left-content---- */}
         <div>

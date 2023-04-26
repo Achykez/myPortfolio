@@ -13,7 +13,6 @@ import {
   ProjectImageContainer,
   ProjectImage,
 } from "../../styles/MyProject.styled";
-import Project1 from "../../assets/Project1.jpg";
 
 const Project = ({ data }) => {
   return (
@@ -44,7 +43,7 @@ const Project = ({ data }) => {
       </div>
       {/* ---right-section-project-image-- */}
       <ProjectImageContainer justify="flex-end">
-        <ProjectImage src={data.project_img } />
+        <ProjectImage src={data.project_img }  alt={data.pro}/>
       </ProjectImageContainer>
     </FlexContainer>
   );

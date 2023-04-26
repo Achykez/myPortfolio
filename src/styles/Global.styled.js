@@ -1,5 +1,19 @@
 import styled from "styled-components";
-import { lightTheme, darkTheme } from "../App";
+import { motion } from "framer-motion";
+
+
+
+export const LoaderWrapper = styled(motion.div)`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.secondary};
+
+`;
+
 
 export const MainBody = styled.div`
   background-color: ${({ theme }) => theme.colors.primary};
