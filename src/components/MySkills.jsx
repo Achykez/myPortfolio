@@ -10,14 +10,29 @@ import {
 } from "../styles/Global.styled";
 
 import { SkillCard, SkillsCardContainer } from "../styles/MySkills.styled";
-
+import { motion } from "framer-motion";
 import { Skills } from "../utils/Data";
+import { fadeInLeftVariant, fadeInRightVariant } from "../utils/Variants";
+
 
 const MySkills = () => {
   return (
-    <PaddingContainer id="Skills" top="10%" bottom="10%">
-      <FlexContainer fullWidthChild>
-        <SkillsCardContainer>
+    <PaddingContainer
+      id="Skills"
+      top="10%"
+      bottom="10%"
+      responsiveLeft="1rem"
+      responsiveRight="1rem">
+      <FlexContainer 
+        responsiveFlex
+        responsiveDirection="column-reverse" 
+        fullWidthChild>
+        <SkillsCardContainer
+          as={motion.div}
+          variants={fadeInLeftVariant}
+          initial="hidden"
+          whileInView="visible"
+        >
           {Skills.map((skill) => (
             <SkillCard>
               <IconContainer size="5rem" color="blue">
@@ -30,7 +45,12 @@ const MySkills = () => {
           ))}
         </SkillsCardContainer>
         {/* --right-section */}
-        <div>
+        <motion.div
+           variants={fadeInRightVariant}
+           initial="hidden"
+           whileInView="visible"
+        
+        >
           <Heading as="h4" size="h4">
             MY SKILLS
           </Heading>
@@ -43,7 +63,7 @@ const MySkills = () => {
             FrontEnd Heavy FullStack developer with an array of skill sets ready
             and willing to get the job done.
           </ParaText>
-        </div>
+        </motion.div>
       </FlexContainer>
     </PaddingContainer>
   );

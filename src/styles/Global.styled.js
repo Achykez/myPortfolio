@@ -1,8 +1,6 @@
 import styled from "styled-components";
 import { motion } from "framer-motion";
 
-
-
 export const LoaderWrapper = styled(motion.div)`
   display: flex;
   flex-direction: column;
@@ -11,9 +9,7 @@ export const LoaderWrapper = styled(motion.div)`
   height: 100vh;
   background-color: ${({ theme }) => theme.colors.primary};
   color: ${({ theme }) => theme.colors.secondary};
-
 `;
-
 
 export const MainBody = styled.div`
   background-color: ${({ theme }) => theme.colors.primary};
@@ -29,6 +25,13 @@ export const PaddingContainer = styled.div`
   padding-bottom: ${({ bottom }) => bottom};
   padding-left: ${({ left }) => left};
   padding-right: ${({ right }) => right};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    padding-top: ${({ responsiveTop }) => responsiveTop};
+    padding-bottom: ${({ responsiveBottom }) => responsiveBottom};
+    padding-left: ${({ responsiveLeft }) => responsiveLeft};
+    padding-right: ${({ responsiveRight }) => responsiveRight};
+  }
 `;
 
 export const FlexContainer = styled.div`
@@ -41,12 +44,16 @@ export const FlexContainer = styled.div`
   & > div {
     flex: ${({ fullWidthChild }) => fullWidthChild && 1};
   }
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    display: ${({ responsiveFlex }) => responsiveFlex ? "flex" : "block"};
+    flex-direction: ${({ responsiveDirection }) => responsiveDirection};
+  }
 `;
 
 export const Heading = styled(PaddingContainer)`
   color: ${({ theme }) => theme.colors.text1};
   font-family: "Josefin Sans", sans-serif;
-  
+
   text-align: ${({ align }) => align};
   font-size: ${({ size }) => {
     switch (size) {
@@ -66,6 +73,27 @@ export const Heading = styled(PaddingContainer)`
         return;
     }
   }};
+
+  @media(max-width: ${({theme}) => theme.breakpoints.mobile}){
+    font-size: ${({ size }) => {
+    switch (size) {
+      case "h1":
+        return "2.5rem";
+
+      case "h2":
+        return "2rem";
+
+      case "h3":
+        return "1.5rem";
+
+      case "h4":
+        return "1rem";
+
+      default:
+        return;
+    }
+  }};
+  }
 `;
 export const BlueText = styled.span`
   color: ${({ theme }) => theme.colors.secondary};
@@ -91,18 +119,18 @@ export const IconContainer = styled.div`
   }};
 `;
 export const Button = styled.a`
-   display: inline-block;
-   width: max-content;
-   padding: 1rem 2rem;
-   color: ${({theme}) => theme.colors.paranormal};
-   background-color: ${({theme}) => theme.colors.primary_light};
-   border: 1px solid ${({theme}) => theme.colors.gray};
-   border-radius: 5px;
-   cursor: pointer;
-   transition: all 0.3s ease;
+  display: inline-block;
+  width: max-content;
+  padding: 1rem 2rem;
+  color: ${({ theme }) => theme.colors.paranormal};
+  background-color: ${({ theme }) => theme.colors.primary_light};
+  border: 1px solid ${({ theme }) => theme.colors.gray};
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
 
-   &:hover{
-    color: ${({theme}) => theme.colors.paranormal};
-    background-color: ${({theme}) => theme.colors.button_hover};
-   }
-`
+  &:hover {
+    color: ${({ theme }) => theme.colors.paranormal};
+    background-color: ${({ theme }) => theme.colors.button_hover};
+  }
+`;

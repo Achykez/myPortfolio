@@ -6,6 +6,10 @@ import {
   Button,
 } from "../styles/Global.styled";
 
+import { motion } from "framer-motion";
+
+import { fadeInBottomVariant } from "../utils/Variants";
+
 //Import footer styles
 
 import { ContactForm, FormInput, FormLabel } from "../styles/Footer.styled";
@@ -13,16 +17,33 @@ import { ContactForm, FormInput, FormLabel } from "../styles/Footer.styled";
 const Footer = () => {
   return (
     <PaddingContainer id="Contact" top="5%" bottom="10%">
-      <Heading as="h4" size="h4" align="center">
+      <Heading
+        as={motion.h4}
+        variants={fadeInBottomVariant}
+        initial="hidden"
+        whileInView="visible"
+        size="h4"
+        align="center">
         My CONTACT
       </Heading>
-      <Heading as="h2" size="h2" align="center" top="0.5rem">
+      <Heading
+        as={motion.h2}
+        variants={fadeInBottomVariant}
+        initial="hidden"
+        whileInView="visible"
+        size="h2"
+        align="center"
+        top="0.5rem">
         Contact <BlueText>Me Here</BlueText>
       </Heading>
 
       <PaddingContainer top="3rem">
         <FlexContainer justify="center">
-          <ContactForm>
+          <ContactForm
+            as={motion.form}
+            variants={fadeInBottomVariant}
+            initial="hidden"
+            whileInView="visible">
             <PaddingContainer bottom="2rem">
               <FormLabel>Name:</FormLabel>
               <FormInput type="text" placeholder="Enter your name" />
@@ -35,8 +56,8 @@ const Footer = () => {
               <FormLabel>Message:</FormLabel>
               <FormInput as="textarea" placeholder="Enter your message" />
             </PaddingContainer>
-            <FlexContainer justify="center">
-                <Button>Send Message</Button>
+            <FlexContainer responsiveFlex justify="center">
+              <Button>Send Message</Button>
             </FlexContainer>
           </ContactForm>
         </FlexContainer>

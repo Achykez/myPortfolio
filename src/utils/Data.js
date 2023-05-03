@@ -41,11 +41,11 @@ export const Skills = [
         tech: 'Python',
         icon: <SiPython />
     },
-    {
-        id: 7,
-        tech: 'C#',
-        icon: <SiCsharp />
-    }
+    // {
+    //     id: 7,
+    //     tech: 'C#',
+    //     icon: <SiCsharp />
+    // }
 
    
 ]
@@ -67,7 +67,7 @@ export const projectDetails = [
         tech_stack: ["ReactJS", "Tailwind", "RAPID API"],
         project_img: Project2,
         project_url: "https://github.com/Achykez/Moozik",
-        reverse: false,
+        reverse: true,
 
     },
     {
@@ -75,9 +75,32 @@ export const projectDetails = [
         project_name: "Tetris App",
         project_desc: " A tetris Game made with ReactJS",
         project_img: Project3,
-        tech_stack: ["ReactJS",],
+        tech_stack: ["ReactJS","Styled-Component"],
         project_url: "https://github.com/Achykez/Tetris-Web-App",
         reverse: false,
 
     }
+]
+
+export const navLinks = [
+    {
+        id: 0,
+        name: 'Home',
+        href: 'Home',
+    },
+    {
+        id: 1,
+        name: 'My Skills',
+        href: 'Skills',
+    },
+    {
+        id: 2,
+        name: 'My Projects',
+        href: 'Projects',
+    },
+    {
+        id: 3,
+        name: 'Contact Me',
+        href: 'Contact',
+    },
 ]

@@ -6,6 +6,9 @@ import { MyProjects } from "./components/MyProjects";
 import Loader from "./utils/Loader";
 import Footer from "./components/Footer";
 import ReactSwitch from 'react-switch';
+import {GiHamburgerMenu} from 'react-icons/gi'
+import { BlueText, FlexContainer, PaddingContainer } from "./styles/Global.styled";
+import NavMenu from "./components/layouts/NavMenu";
 
 export const lightTheme = {
   colors: {
@@ -63,7 +66,7 @@ export const darkTheme = {
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
-
+  const [openMenu, setOpenMenu] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -98,9 +101,24 @@ function App() {
         <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
           <MainBody>
             <NavBar>
-              {/* <Button type="toggle" onClick={toggleTheme}>
-                {isDarkMode ? "Light Theme" : "Dark Theme"}
-              </Button> */}
+            <PaddingContainer
+              top="1.2rem"
+              bottom="1.2rem"
+              responsiveLeft="1rem"
+              responsiveRight="1rem"
+              >
+                <Container>
+                  <FlexContainer justify="space-between" responsiveFlex>
+                    <Logo>
+                      Engr-<BlueText>Chyke</BlueText>
+                    </Logo>
+                    <MenuIcon onClick={() => setOpenMenu(true)}>
+                      <GiHamburgerMenu />
+                    </MenuIcon>
+                  </FlexContainer>
+                </Container>
+                {openMenu && <NavMenu  setOpenMenu={setOpenMenu}/>}
+              </PaddingContainer>
               
             </NavBar>
             <SwitchContainer>
@@ -113,14 +131,12 @@ function App() {
                   uncheckedIcon={<span style={{display: 'flex',fontSize: '20px', color:"aliceblue",  justifyContent: 'center'}}>☽</span>}
                   checkedIcon={<span style={{display: 'flex', fontSize: '20px', color:"aliceblue",  justifyContent: 'center'}}>✺</span>}
                   offColor="transparent"
-                  onColor="#000"
-    
+                  onColor="#000"    
                 />
               </SwitchContainer>
             <Container>
               <ShowCase />
-              <MySkills />
-              
+              <MySkills />              
               <MyProjects />
               <Footer />
             </Container>
@@ -149,12 +165,31 @@ const Button = styled.button`
     background-color: ${({ theme }) => theme.colors.button_hover};
   }
 `;
+
+const Logo = styled.p`
+ display:  flex;
+ font-size: 1.7rem;
+ font-weight: ${({theme}) => theme.fonts.weight.medium};
+ color: #fff;
+ font-family: ${({theme}) => theme.fonts.family};
+`;
+
+const MenuIcon = styled.a`
+  color: ${({theme}) => theme.colors.secondary};
+  font-size: 1.6rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+ 
+
+`
 const NavBar = styled.div`
   z-index: 999;
-  display: flex;
   align-items: center;
   gap: 10px;
   position: sticky;
+  padding-left: 2rem  ;
   width: 100%;
   height: 80px;
   background-color: ${({ theme }) => theme.colors.tertiary};
@@ -165,13 +200,13 @@ const NavBar = styled.div`
 
 export const MainBody = styled.div`
   background-color: ${({ theme }) => theme.colors.primary};
+  width: 100%;
 `;
 
 export const Container = styled.div`
   width: 90%;
   max-width: 1280px;
   margin: auto;
-
   @media only screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: 100%;
     padding: 0 20px;

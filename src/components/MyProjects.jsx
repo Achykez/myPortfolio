@@ -1,3 +1,5 @@
+import { motion } from "framer-motion";
+import { fadeInTopVariant } from "../utils/Variants";
 import { PaddingContainer, Heading, BlueText } from "../styles/Global.styled";
 import { projectDetails } from "../utils/Data";
 import Project from "./layouts/Project";
@@ -7,12 +9,25 @@ export const MyProjects = () => {
         id="Projects"
         top="5%"
         bottom="5%"
+        responsiveTop="20%"
+        responsiveLeft="1rem"
+        responsiveRight="1rem"
     >
-      <Heading as="h4" size="h4">
+      <Heading 
+        as={motion.h4}
+        variants={fadeInTopVariant}
+        initial="hidden"
+        whileInView="visible"      
+        size="h4">
         MY PROJECTS
       </Heading>
 
-      <Heading as="h2" size="h2">
+      <Heading 
+        as={motion.h2}
+        variants={fadeInTopVariant}
+        initial="hidden"
+        whileInView="visible"      
+        size="h2">
         What <BlueText>I Have Built</BlueText>
       </Heading>
       {projectDetails.map((project) =>(
