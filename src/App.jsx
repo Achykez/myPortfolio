@@ -7,6 +7,8 @@ import Loader from "./utils/Loader";
 import Footer from "./components/Footer";
 import ReactSwitch from "react-switch";
 import { GiHamburgerMenu } from "react-icons/gi";
+import { Spin } from 'antd';
+
 import {
   BlueText,
   FlexContainer,
@@ -24,6 +26,7 @@ import {
 } from "./styles/Global.styled";
 import NavMenu from "./components/layouts/NavMenu";
 import { lightTheme, darkTheme, yellowTheme,greenTheme,themeOptions } from "./utils/Theme";
+import { color } from "style-value-types";
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -46,7 +49,7 @@ function App() {
     // Simulate a delay to show the loader
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 500);
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -61,6 +64,17 @@ function App() {
     }
   }, []);
 
+  const containerStyles = {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100vh",
+    backgroundColor: "#161515",
+    color: selectedTheme.colors.secondary,
+  };
+  
+
   const toggleTheme = () => {
     const newMode = !isDarkMode;
     setIsDarkMode(newMode);
@@ -69,7 +83,8 @@ function App() {
   return (
     <ThemeProvider theme={isDarkMode ? darkTheme : yellowTheme}>
       {loading ? (
-        <Loader />
+        // <Loader />
+        <Spin size="large" tip="Loading..." style={containerStyles} spinStyle={{color : isDarkMode ?  "#7eadfc" : "#555555" }} />
       ) : (
         <>
           <MainBody>
