@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import styled from "styled-components";
 
 import {
   FlexContainer,
@@ -12,16 +13,28 @@ import { genesys } from "../utils/experience";
 import { BsInstagram, BsFacebook, BsTwitter, BsYoutube } from "react-icons/bs";
 import {
   ShowCaseParticleContainer,
-  ShowImageCard,
+  // ShowImageCard,
   Particle,
 } from "../styles/Showcase.styled";
 import codeBlue from "../assets/codeblue.JPG";
+import Achykez from "../assets/ACHYKEZ.png";
 import BackParticle from "../assets/particle.png";
 import { Clock } from "../utils/Clock";
 import { motion } from "framer-motion";
 import { fadeInLeftVariant, fadeInRightVariant } from "../utils/Variants";
 
 const ShowCase = () => {
+  // const [imageSource, setImageSource] = useState(codeBlue);
+
+  const rotateAnimation = {
+    rotate: [350, 360],
+    transition: {
+      duration: 8,
+      repeat: 2,
+      ease: "linear",
+    },
+  };
+
   return (
     <PaddingContainer
       resopnsiveLeft="1rem"
@@ -30,15 +43,14 @@ const ShowCase = () => {
       id="Home"
       left="3%"
       right="10%"
-      top="15%"
+      top="6%"
       bottom="10%">
-      <FlexContainer align="center" fullWidthChild >
+      <FlexContainer align="center" fullWidthChild>
         {/* ----Left-content---- */}
         <motion.div
           variants={fadeInLeftVariant}
           initial="hidden"
-          whileInView="visible"
-        >
+          whileInView="visible">
           <Heading as="h4" size="h4">
             Hello
           </Heading>
@@ -51,11 +63,24 @@ const ShowCase = () => {
 
           <ParaText as="p" top="2rem" bottom="4rem">
             Hello There , my name is Achike Chude and I'm a FrontEnd Developer
-            with
-            {genesys.years > 0 ? `${genesys.years} years and` : null}{" "}
-            {genesys.months} months of experience in creating user friendly
-            websites and web applications. My experience has grown since{" "}
-            <Clock />.
+            with{" "}
+            {genesys.years > 0 ? (
+              <>
+                <StyledSpan>
+                  {genesys.years.toString().padStart(2, "0")}
+                </StyledSpan>
+                {" years and "}
+              </>
+            ) : null}
+            <StyledSpan>
+              {genesys.months.toString().padStart(2, "0")}
+            </StyledSpan>
+            {
+              " months of experience in creating user friendly websites and web applications. My experience has grown since "
+            }
+            <StyledSpan>
+              <Clock />
+            </StyledSpan>
           </ParaText>
 
           {/* ----social-icons----  */}
@@ -75,78 +100,71 @@ const ShowCase = () => {
           </FlexContainer>
         </motion.div>
 
-          {/* ---right-content---- */}
+        {/* ---right-content---- */}
 
         <FlexContainer
-         justify="flex-end"
-         as={motion.div}
-         variants={fadeInRightVariant}
-         initial="hidden"
-         whileInView="visible"
-         >
-          <ShowCaseParticleContainer>
-            <ShowImageCard>
-              <img src={codeBlue} alt="image" />
-            </ShowImageCard>
-            <Particle
-              as={motion.img}
-              animate={{
-                x: [0, 100, 0],
-                rotate: 360,
-                scale: [1, 0.5, 1]
+  justify="flex-end"
+  as={motion.div}
+  variants={fadeInRightVariant}
+  initial="hidden"
+  whileInView="visible"
+>
+<ShowCaseParticleContainer>
+      <ImageWrapper animate={rotateAnimation}>
+        <Image src={Achykez} alt="image" />
+      </ImageWrapper>
+    </ShowCaseParticleContainer>
+</FlexContainer>
 
-              }}
-              transition={{
-                duration: 20,
-                repeat: Infinity,
-              }}
-              src={BackParticle}
-              alt="back"
-              top="-70px"
-              left="20px"
-              rotate="60deg"
-            />
-            <Particle
-               as={motion.img}
-               animate={{
-                 y: [0, 100, 0],
-                 rotate: 360,
-                 scale: [1, 0.8, 1]
- 
-               }}
-               transition={{
-                 duration: 18,
-                 repeat: Infinity,
-               }}
-              src={BackParticle}
-              alt="back"
-              top="70px"
-              right="-70px"
-              rotate="0deg"
-            />
-            <Particle
-             as={motion.img}
-             animate={{
-               y: [0, -100, 0],
-               rotate: 360,
-               scale: [1, 0.9, 1]
-
-             }}
-             transition={{
-               duration: 15,
-               repeat: Infinity,
-             }}
-              src={BackParticle}
-              alt="back"
-              bottom="10px"
-              left="-60px"
-              rotate="50deg"
-            />
-          </ShowCaseParticleContainer>
-        </FlexContainer>
       </FlexContainer>
     </PaddingContainer>
   );
 };
+
+const StyledSpan = styled.span`
+  display: inline-block;
+  padding: 0.1rem 0.5rem;
+  border: 1px solid black;
+  border-radius: 8px;
+  background-color: ${({theme}) => theme.colors.text1};
+  color: ${({theme}) => theme.colors.secondary};
+  font-weight: bold;
+`;
+
+
+
+// const ShowImageCard = styled.div`
+//   border: 1px solid ${({ theme }) => theme.colors.text2};
+//   width: max-content;
+//   padding-top: 2rem;
+//   border-radius: 1rem;
+//   position: relative;
+//   overflow: hidden;
+// `;
+
+const Image = styled.img`
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  height: auto;
+  width: auto;
+  margin: auto;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+`;
+
+const ImageWrapper = styled(motion.div)`
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+`;
+
 
 export default ShowCase;

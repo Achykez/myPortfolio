@@ -1,4 +1,4 @@
-const dateString = "2022-05-15";
+const dateString = "2022-03-15";
 const howLongAgo = (genie) => {
   const today = new Date();
   const targetDate = new Date(genie);

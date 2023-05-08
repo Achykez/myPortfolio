@@ -55,13 +55,11 @@ const MySkills = () => {
             MY SKILLS
           </Heading>
           <Heading as="h2" size="h2" top="0.5rem">
-            I <BlueText> can do</BlueText>
+           What I <BlueText> can do ?</BlueText>
           </Heading>
 
           <ParaText>
-            A whole lot actually, ranging from web designs to app designs,
-            FrontEnd Heavy FullStack developer with an array of skill sets ready
-            and willing to get the job done.
+          I have a broad range of skills that enable me to tackle various web and app development projects. As a FrontEnd Heavy FullStack developer, I can handle all aspects of the development process, from ideation and design to implementation and deployment. I have a deep understanding of front-end technologies, including HTML, CSS, and JavaScript, as well as popular front-end frameworks such as React and Vue. Additionally, I have experience with back-end technologies like Node.js, Express, and MongoDB, allowing me to develop full-stack applications. I am familiar with various development tools and practices, including Git, Agile methodologies, and test-driven development. Overall, I am a versatile developer with a diverse set of skills and a passion for creating user-friendly and engaging web and app experiences.
           </ParaText>
         </motion.div>
       </FlexContainer>

@@ -23,9 +23,9 @@ export const SkillCard  = styled.div`
     background-color: ${({theme}) => theme.colors.primary_light};    
 
     @media(max-width: ${({theme}) => theme.breakpoints.mobile}){
-        width: 60%;
+        width: 80%;
         margin-top: 2rem;
         margin-left: 2rem;
-
+        border-radius: 12px;
     }
 `
