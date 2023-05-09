@@ -43,6 +43,11 @@ function App() {
   const [openMenu, setOpenMenu] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  const selectedTheme = {
+    light: "#FFC107",
+    dark: "#7eadfc"
+  }
+
   // const [isOpen, setIsOpen] = useState(false);
   // const [selectedTheme, setSelectedTheme] = useState(lightTheme);
 
@@ -78,7 +83,7 @@ function App() {
     alignItems: "center",
     height: "100vh",
     backgroundColor: "#161515",
-    color: selectedTheme.colors.secondary,
+    color: isDarkMode ? selectedTheme.dark : selectedTheme.light,
   };
 
   const toggleTheme = () => {
@@ -90,12 +95,8 @@ function App() {
     <ThemeProvider theme={isDarkMode ? darkTheme : yellowTheme}>
       {loading ? (
         // <Loader />
-        <Spin
-          size="large"
-          tip="Loading..."
-          style={containerStyles}
-          spinStyle={{ color: isDarkMode ? "#7eadfc" : "#555555" }}
-        />
+        <Spin size="large" tip="Loading..." style={containerStyles} color={isDarkMode ? selectedTheme.dark : selectedTheme.light} />
+
       ) : (
         <>
           <MainBody>
