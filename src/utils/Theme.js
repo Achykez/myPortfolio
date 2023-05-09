@@ -40,6 +40,8 @@ export const darkTheme = {
     tertiary: "#131c31",
     stick: "#fff",
     paranormal: "#fff",
+    normal: "#FFF",
+
     nav: "#7eadfc",
 
     button_normal: "#fff",
@@ -70,6 +72,7 @@ export const yellowTheme = {
     tertiary: "#F8D347",
     stick: "#F8D347",
     paranormal: "#FFFFFF",
+    normal: "#FFC107",
     nav: "#333333",
 
     button_normal: "#FFFFFF",

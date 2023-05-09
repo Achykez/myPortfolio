@@ -7,7 +7,7 @@ import Loader from "./utils/Loader";
 import Footer from "./components/Footer";
 import ReactSwitch from "react-switch";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { Spin } from 'antd';
+import { Spin } from "antd";
 
 import {
   BlueText,
@@ -22,28 +22,38 @@ import {
   DropdownItem,
   DropdownWrapper,
   Container,
-  MenuIcon
+  MenuIcon,
 } from "./styles/Global.styled";
 import NavMenu from "./components/layouts/NavMenu";
-import { lightTheme, darkTheme, yellowTheme,greenTheme,themeOptions } from "./utils/Theme";
+import {
+  lightTheme,
+  darkTheme,
+  yellowTheme,
+  greenTheme,
+  themeOptions,
+} from "./utils/Theme";
 import { color } from "style-value-types";
 
 function App() {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const now = new Date();
+  const currentHour = now.getHours();
+  const isDaytime = currentHour >= 6 && currentHour < 18;
+
+  const [isDarkMode, setIsDarkMode] = useState(isDaytime ? true : false);
   const [openMenu, setOpenMenu] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedTheme, setSelectedTheme] = useState(lightTheme);
+  // const [isOpen, setIsOpen] = useState(false);
+  // const [selectedTheme, setSelectedTheme] = useState(lightTheme);
 
-  const handleDropdownClick = () => {
-    setIsOpen(!isOpen);
-  };
+  // const handleDropdownClick = () => {
+  //   setIsOpen(!isOpen);
+  // };
 
-  const handleThemeChange = (theme) => {
-    setSelectedTheme(theme);
-    setIsOpen(false);
-  };
+  // const handleThemeChange = (theme) => {
+  //   setSelectedTheme(theme);
+  //   setIsOpen(false);
+  // };
 
   useEffect(() => {
     // Simulate a delay to show the loader
@@ -56,14 +66,11 @@ function App() {
 
   useEffect(() => {
     const savedMode = localStorage.getItem("isDarkMode");
-    const currentTime = new Date().getHours();
     if (savedMode !== null) {
       setIsDarkMode(savedMode === "true");
-    } else {
-      setIsDarkMode(currentTime >= 19 || currentTime < 7);
     }
   }, []);
-
+  
   const containerStyles = {
     display: "flex",
     flexDirection: "column",
@@ -73,7 +80,6 @@ function App() {
     backgroundColor: "#161515",
     color: selectedTheme.colors.secondary,
   };
-  
 
   const toggleTheme = () => {
     const newMode = !isDarkMode;
@@ -84,7 +90,12 @@ function App() {
     <ThemeProvider theme={isDarkMode ? darkTheme : yellowTheme}>
       {loading ? (
         // <Loader />
-        <Spin size="large" tip="Loading..." style={containerStyles} spinStyle={{color : isDarkMode ?  "#7eadfc" : "#555555" }} />
+        <Spin
+          size="large"
+          tip="Loading..."
+          style={containerStyles}
+          spinStyle={{ color: isDarkMode ? "#7eadfc" : "#555555" }}
+        />
       ) : (
         <>
           <MainBody>
@@ -109,18 +120,37 @@ function App() {
             </NavBar>
             <SwitchContainer>
               <ReactSwitch
-                  checked={isDarkMode}
-                  onChange={toggleTheme}
-                  height={30}
-                  width={60}
-                  handleDiameter={28}
-                  uncheckedIcon={<span style={{display: 'flex',fontSize: '20px', color:"aliceblue",  justifyContent: 'center'}}>☽</span>}
-                  checkedIcon={<span style={{display: 'flex', fontSize: '20px', color:"aliceblue",  justifyContent: 'center'}}>✺</span>}
-                  offColor="transparent"
-                  onColor="#000"    
-                />
-              </SwitchContainer>
-
+                checked={isDarkMode}
+                onChange={toggleTheme}
+                height={30}
+                width={60}
+                handleDiameter={28}
+                uncheckedIcon={
+                  <span
+                    style={{
+                      display: "flex",
+                      fontSize: "20px",
+                      color: "aliceblue",
+                      justifyContent: "center",
+                    }}>
+                    ☽
+                  </span>
+                }
+                checkedIcon={
+                  <span
+                    style={{
+                      display: "flex",
+                      fontSize: "20px",
+                      color: "aliceblue",
+                      justifyContent: "center",
+                    }}>
+                    ✺
+                  </span>
+                }
+                offColor="transparent"
+                onColor="#000"
+              />
+            </SwitchContainer>
 
             {/* <DropdownWrapper>
               <DropdownButton onClick={handleDropdownClick}>
@@ -138,9 +168,9 @@ function App() {
                 ))}
               </DropdownContent>
             </DropdownWrapper> */}
-           
+
             <Container>
-              <ShowCase/>
+              <ShowCase />
               <MySkills />
               <MyProjects />
               <Footer />
@@ -150,18 +180,18 @@ function App() {
       )}
     </ThemeProvider>
   );
-};
+}
 
 export const NavText = styled.span`
   color: ${({ theme }) => theme.colors.nav};
 `;
 const SwitchContainer = styled.div`
-   position: fixed;
+  position: fixed;
   display: flex;
   margin: auto;
   align-items: center;
   justify-content: flex-end;
-  background-color: ${({theme}) => theme.colors.button_hover};
+  background-color: ${({ theme }) => theme.colors.button_hover};
   margin-top: 12px;
   margin-left: 8px;
   border-radius: 10px;
@@ -176,6 +206,5 @@ const SwitchContainer = styled.div`
     opacity: 1;
   }
 `;
-
 
 export default App;

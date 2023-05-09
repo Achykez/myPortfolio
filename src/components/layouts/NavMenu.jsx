@@ -48,7 +48,7 @@ const NavMenuContainer = styled.div`
   z-index: 1;
 `;
 const MenuIcon = styled.a`
-  color: ${({ theme }) => theme.colors.secondary};
+  color: ${({ theme }) => theme.colors.nav};
   font-size: 1.6rem;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -62,5 +62,8 @@ export const MenuItem = styled.a`
   margin-top: 3rem;
   cursor: pointer;
   text-decoration: none;
+   &:hover {
+    color: ${({theme }) => theme.colors.nav}
+   }
 `;
 export default NavMenu;

@@ -130,7 +130,7 @@ export const Button = styled.a`
   transition: all 0.3s ease;
 
   &:hover {
-    color: ${({ theme }) => theme.colors.paranormal};
+    color: ${({ theme }) => theme.colors.normal};
     background-color: ${({ theme }) => theme.colors.nav};
   }
 `;
