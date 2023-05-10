@@ -7,7 +7,7 @@ import Loader from "./utils/Loader";
 import Footer from "./components/Footer";
 import ReactSwitch from "react-switch";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { Spin } from "antd";
+import { ConfigProvider, Spin } from "antd";
 
 import {
   BlueText,
@@ -45,7 +45,9 @@ function App() {
 
   const selectedTheme = {
     light: "#FFC107",
-    dark: "#7eadfc"
+    dark: "#7eadfc",
+    bg_dark: "#161515",
+    bg_light: "#FFF",
   }
 
   // const [isOpen, setIsOpen] = useState(false);
@@ -82,7 +84,7 @@ function App() {
     justifyContent: "center",
     alignItems: "center",
     height: "100vh",
-    backgroundColor: "#161515",
+    backgroundColor: isDarkMode ? selectedTheme.bg_dark : selectedTheme.bg_light,
     color: isDarkMode ? selectedTheme.dark : selectedTheme.light,
   };
 
@@ -92,7 +94,15 @@ function App() {
     localStorage.setItem("isDarkMode", newMode.toString());
   };
   return (
-    <ThemeProvider theme={isDarkMode ? darkTheme : yellowTheme}>
+    <ConfigProvider
+        theme={{
+          token: {
+            colorPrimary: isDarkMode ? selectedTheme.dark : selectedTheme.light,
+          }
+        }}
+    
+    >
+      <ThemeProvider theme={isDarkMode ? darkTheme : yellowTheme}>
       {loading ? (
         // <Loader />
         <Spin size="large" tip="Loading..." style={containerStyles} color={isDarkMode ? selectedTheme.dark : selectedTheme.light} />
@@ -171,7 +181,7 @@ function App() {
             </DropdownWrapper> */}
 
             <Container>
-              <ShowCase />
+              <ShowCase darkMode={isDarkMode} />
               <MySkills />
               <MyProjects />
               <Footer />
@@ -180,6 +190,7 @@ function App() {
         </>
       )}
     </ThemeProvider>
+    </ConfigProvider>
   );
 }
 

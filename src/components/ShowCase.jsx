@@ -10,7 +10,14 @@ import {
   ParaText,
 } from "../styles/Global.styled";
 import { genesys } from "../utils/experience";
-import { BsInstagram, BsFacebook, BsTwitter, BsYoutube } from "react-icons/bs";
+import {
+  BsInstagram,
+  BsFacebook,
+  BsTwitter,
+  BsYoutube,
+  BsGithub,
+  BsTiktok,
+} from "react-icons/bs";
 import {
   ShowCaseParticleContainer,
   // ShowImageCard,
@@ -18,14 +25,21 @@ import {
 } from "../styles/Showcase.styled";
 import codeBlue from "../assets/codeblue.JPG";
 import Achykez from "../assets/ACHYKEZ.png";
+import myFace from "../assets/myFace.png";
 import BackParticle from "../assets/particle.png";
-import { Clock } from "../utils/Clock";
 import { motion } from "framer-motion";
 import { fadeInLeftVariant, fadeInRightVariant } from "../utils/Variants";
+import { experienceText } from "../utils/experience";
+import { Cursor, useTypewriter, Typewriter } from "react-simple-typewriter";
 
-const ShowCase = () => {
+const ShowCase = (props) => {
   // const [imageSource, setImageSource] = useState(codeBlue);
-
+  const hoverEffect = {
+    "&:hover": {
+      transform: "scale(3.0)"
+    }
+  };
+  
   const rotateAnimation = {
     rotate: [350, 360],
     transition: {
@@ -52,50 +66,53 @@ const ShowCase = () => {
           initial="hidden"
           whileInView="visible">
           <Heading as="h4" size="h4">
-            Hello
+            <Typewriter delaySpeed={100} words={["Greetings"]} />
           </Heading>
           <Heading as="h1" size="h1" top="0.5rem" bottom="0.5rem">
-            My name is <BlueText>Achike Chude</BlueText>
+            <Typewriter delaySpeed={100} words={["My name is"]} />{" "}
+            <BlueText>
+              <Typewriter delaySpeed={100} words={["Achike Chude"]} />
+            </BlueText>
           </Heading>
           <Heading size="h3" as="h3">
             I am a <BlueText>Frontend Developer</BlueText>
           </Heading>
 
           <ParaText as="p" top="2rem" bottom="4rem">
-            Hello There , my name is Achike Chude and I'm a FrontEnd Developer
-            with{" "}
-            {genesys.years > 0 ? (
-              <>
-                <StyledSpan>
-                  {genesys.years.toString().padStart(2, "0")}
-                </StyledSpan>
-                {" years and "}
-              </>
-            ) : null}
-            <StyledSpan>
-              {genesys.months.toString().padStart(2, "0")}
-            </StyledSpan>
-            {
-              " months of experience in creating user friendly websites and web applications. My experience has grown since "
-            }
-            <StyledSpan>
-              <Clock />
-            </StyledSpan>
+            {experienceText()}
           </ParaText>
 
           {/* ----social-icons----  */}
           <FlexContainer gap="20px" responsiveFlex>
             <IconContainer color="white" size="1.5rem">
-              <BsInstagram />
+              <StyledIcon href="https://instagram.com/achykez">
+                {" "}
+                <BsInstagram />
+              </StyledIcon>
             </IconContainer>
             <IconContainer color="white" size="1.5rem">
-              <BsTwitter />
+              <StyledIcon href="https://twitter.com/im_chyke">
+                {" "}
+                <BsTwitter />
+              </StyledIcon>{" "}
             </IconContainer>
             <IconContainer color="white" size="1.5rem">
-              <BsFacebook />
+              <StyledIcon href="https://tiktok.com/iz_chyke">
+                {" "}
+                <BsTiktok />
+              </StyledIcon>{" "}
+            </IconContainer>
+            <IconContainer style={hoverEffect} color="white" size="1.5rem">
+              <StyledIcon href="https://github.com/achykez">
+                {" "}
+                <BsGithub />
+              </StyledIcon>{" "}
             </IconContainer>
             <IconContainer color="white" size="1.5rem">
-              <BsYoutube />
+              <StyledIcon href="https://web.facebook.com/georgeachike.chude/">
+                {" "}
+                <BsFacebook />
+              </StyledIcon>{" "}
             </IconContainer>
           </FlexContainer>
         </motion.div>
@@ -103,35 +120,31 @@ const ShowCase = () => {
         {/* ---right-content---- */}
 
         <FlexContainer
-  justify="flex-end"
-  as={motion.div}
-  variants={fadeInRightVariant}
-  initial="hidden"
-  whileInView="visible"
->
-<ShowCaseParticleContainer>
-      <ImageWrapper animate={rotateAnimation}>
-        <Image src={Achykez} alt="image" />
-      </ImageWrapper>
-    </ShowCaseParticleContainer>
-</FlexContainer>
-
+          justify="flex-end"
+          as={motion.div}
+          variants={fadeInRightVariant}
+          initial="hidden"
+          whileInView="visible">
+          <ShowCaseParticleContainer>
+            <ImageWrapper animate={rotateAnimation}>
+              {props.darkMode ? (
+                <Image src={Achykez} alt="image" />
+              ) : (
+                <Image src={myFace} alt="image" />
+              )}
+            </ImageWrapper>
+          </ShowCaseParticleContainer>
+        </FlexContainer>
       </FlexContainer>
     </PaddingContainer>
   );
 };
 
-const StyledSpan = styled.span`
-  display: inline-block;
-  padding: 0.1rem 0.5rem;
-  border: 1px solid black;
-  border-radius: 8px;
-  background-color: ${({theme}) => theme.colors.text1};
-  color: ${({theme}) => theme.colors.secondary};
-  font-weight: bold;
+
+const StyledIcon = styled.a`
+  text-decoration: none;
+  color: ${({theme}) => theme.colors.text1};
 `;
-
-
 
 // const ShowImageCard = styled.div`
 //   border: 1px solid ${({ theme }) => theme.colors.text2};
@@ -165,6 +178,5 @@ const ImageWrapper = styled(motion.div)`
   align-items: center;
   z-index: 10;
 `;
-
 
 export default ShowCase;
