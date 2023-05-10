@@ -97,7 +97,7 @@ const ShowCase = (props) => {
               </StyledIcon>{" "}
             </IconContainer>
             <IconContainer color="white" size="1.5rem">
-              <StyledIcon href="https://tiktok.com/iz_chyke">
+              <StyledIcon href="https://tiktok.com/@iz_chyke">
                 {" "}
                 <BsTiktok />
               </StyledIcon>{" "}
