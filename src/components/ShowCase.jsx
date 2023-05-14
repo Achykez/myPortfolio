@@ -14,19 +14,14 @@ import {
   BsInstagram,
   BsFacebook,
   BsTwitter,
-  BsYoutube,
   BsGithub,
   BsTiktok,
 } from "react-icons/bs";
 import {
   ShowCaseParticleContainer,
-  // ShowImageCard,
-  Particle,
 } from "../styles/Showcase.styled";
-import codeBlue from "../assets/codeblue.JPG";
 import Achykez from "../assets/ACHYKEZ.png";
 import myFace from "../assets/myFace.png";
-import BackParticle from "../assets/particle.png";
 import { motion } from "framer-motion";
 import { fadeInLeftVariant, fadeInRightVariant } from "../utils/Variants";
 import { experienceText } from "../utils/experience";
@@ -57,7 +52,7 @@ const ShowCase = (props) => {
       id="Home"
       left="3%"
       right="10%"
-      top="6%"
+      top="15%"
       bottom="10%">
       <FlexContainer align="center" fullWidthChild>
         {/* ----Left-content---- */}

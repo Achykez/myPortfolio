@@ -45,7 +45,7 @@ export const FlexContainer = styled.div`
     flex: ${({ fullWidthChild }) => fullWidthChild && 1};
   }
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    display: ${({ responsiveFlex }) => responsiveFlex ? "flex" : "block"};
+    display: ${({ responsiveFlex }) => (responsiveFlex ? "flex" : "block")};
     flex-direction: ${({ responsiveDirection }) => responsiveDirection};
   }
 `;
@@ -74,25 +74,25 @@ export const Heading = styled(PaddingContainer)`
     }
   }};
 
-  @media(max-width: ${({theme}) => theme.breakpoints.mobile}){
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     font-size: ${({ size }) => {
-    switch (size) {
-      case "h1":
-        return "2.5rem";
+      switch (size) {
+        case "h1":
+          return "2.5rem";
 
-      case "h2":
-        return "2rem";
+        case "h2":
+          return "2rem";
 
-      case "h3":
-        return "1.5rem";
+        case "h3":
+          return "1.5rem";
 
-      case "h4":
-        return "1rem";
+        case "h4":
+          return "1rem";
 
-      default:
-        return;
-    }
-  }};
+        default:
+          return;
+      }
+    }};
   }
 `;
 export const BlueText = styled.span`
@@ -174,41 +174,51 @@ export const DropdownItem = styled.button`
   }
 `;
 export const Logo = styled.p`
- display:  flex;
- font-size: 1.7rem;
- font-weight: ${({theme}) => theme.fonts.weight.medium};
- color: #fff;
- font-family: ${({theme}) => theme.fonts.family};
+  display: flex;
+  font-size: 1.7rem;
+  font-weight: ${({ theme }) => theme.fonts.weight.medium};
+  color: #fff;
+  margin-left: 20px;
+  font-family: ${({ theme }) => theme.fonts.family};
+  padding: 0 0 0 20px;
+  @media only screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+     margin-left:  50px;
+  }        
+
+
 `;
 
 export const MenuIcon = styled.a`
-  color: ${({theme}) => theme.colors.nav};
+  color: ${({ theme }) => theme.colors.nav};
   font-size: 1.6rem;
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
- 
-
-`
+`;
 export const NavBar = styled.div`
   z-index: 999;
   align-items: center;
   gap: 10px;
-  position: sticky;
-  padding-left: 2rem  ;
+  /* position: sticky; */
+  padding-left: 2rem;
   width: 100%;
   height: 80px;
   background-color: ${({ theme }) => theme.colors.tertiary};
   transition: all 0.3s ease-in;
-  top: 0;
+  /* top: 0; */
   border-bottom: 1px solid ${({ theme }) => theme.colors.stick};
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
 `;
 
 export const MainBody = styled.div`
   background-color: ${({ theme }) => theme.colors.primary};
   width: 100%;
-   position: relative;
+  position: relative;
   overflow: hidden;
 `;
 
@@ -216,18 +226,19 @@ export const Container = styled.div`
   width: 90%;
   max-width: 1280px;
   margin: auto;
-  @media only screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+  @media only screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {        
     width: 100%;
     padding: 0 20px;
   }
-`;
+`; 
+
 export const SwitchContainer = styled.div`
-   position: fixed;
+  position: fixed;
   display: flex;
   margin: auto;
   align-items: center;
   justify-content: flex-end;
-  background-color: ${({theme}) => theme.colors.button_hover};
+  background-color: ${({ theme }) => theme.colors.button_hover};
   margin-top: 12px;
   margin-left: 8px;
   border-radius: 10px;

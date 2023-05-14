@@ -34,8 +34,8 @@ const MySkills = () => {
           whileInView="visible"
         >
           {Skills.map((skill) => (
-            <SkillCard>
-              <IconContainer size="5rem" color="blue">
+            <SkillCard   style={{ transform: 'rotate(0 360deg)' }}>
+              <IconContainer  size="5rem" color="blue">
                 {skill.icon}
               </IconContainer>
               <Heading as="h4" size="h4">

@@ -10,29 +10,20 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import { ConfigProvider, Spin } from "antd";
 
 import {
-  BlueText,
   FlexContainer,
   PaddingContainer,
   MainBody,
   NavBar,
-  LoaderWrapper,
-  Logo,
-  DropdownButton,
-  DropdownContent,
-  DropdownItem,
-  DropdownWrapper,
+  Logo, 
   Container,
   MenuIcon,
 } from "./styles/Global.styled";
 import NavMenu from "./components/layouts/NavMenu";
 import {
-  lightTheme,
   darkTheme,
   yellowTheme,
-  greenTheme,
-  themeOptions,
+ 
 } from "./utils/Theme";
-import { color } from "style-value-types";
 
 function App() {
   const now = new Date();
@@ -129,39 +120,42 @@ function App() {
                 {openMenu && <NavMenu setOpenMenu={setOpenMenu} />}
               </PaddingContainer>
             </NavBar>
-            <SwitchContainer>
-              <ReactSwitch
-                checked={isDarkMode}
-                onChange={toggleTheme}
-                height={30}
-                width={60}
-                handleDiameter={28}
-                uncheckedIcon={
-                  <span
-                    style={{
-                      display: "flex",
-                      fontSize: "20px",
-                      color: "aliceblue",
-                      justifyContent: "center",
-                    }}>
-                    ☽
-                  </span>
-                }
-                checkedIcon={
-                  <span
-                    style={{
-                      display: "flex",
-                      fontSize: "20px",
-                      color: "aliceblue",
-                      justifyContent: "center",
-                    }}>
-                    ✺
-                  </span>
-                }
-                offColor="transparent"
-                onColor="#000"
-              />
-            </SwitchContainer>
+         {
+          openMenu === false ? 
+          <SwitchContainer>
+          <ReactSwitch
+            checked={isDarkMode}
+            onChange={toggleTheme}
+            height={30}
+            width={60}
+            handleDiameter={28}
+            uncheckedIcon={
+              <span
+                style={{
+                  display: "flex",
+                  fontSize: "20px",
+                  color: "aliceblue",
+                  justifyContent: "center",
+                }}>
+                ☽
+              </span>
+            }
+            checkedIcon={
+              <span
+                style={{
+                  display: "flex",
+                  fontSize: "20px",
+                  color: "aliceblue",
+                  justifyContent: "center",
+                }}>
+                ✺
+              </span>
+            }
+            offColor="transparent"
+            onColor="#000"
+          />
+        </SwitchContainer> : null
+         }
 
             {/* <DropdownWrapper>
               <DropdownButton onClick={handleDropdownClick}>
@@ -211,8 +205,8 @@ const SwitchContainer = styled.div`
   opacity: 0.3;
   transition: opacity 0.3s ease-in-out;
   z-index: 9999;
-  cursor: move;
-  left: 10;
+  cursor: none;
+  left: 10;  
 
   &:hover {
     opacity: 1;
