@@ -269,3 +269,16 @@ export const SwitchContainer = styled.div`
     opacity: 1;
   }
 `;
+export const FadeImg = styled.img`
+  position: absolute;
+  top: ${({top}) => top};
+  right: ${({right}) => right};
+  left: ${({left}) => left};
+  bottom: ${({bottom}) => bottom};
+  z-index: 1;
+
+  @media ${({theme}) => theme.breakpoints.mobile}{
+    display: none;
+  }
+
+`

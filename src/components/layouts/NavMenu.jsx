@@ -16,7 +16,7 @@ const NavMenu = ({ setOpenMenu }) => {
     >
       <PaddingContainer left="5%" right="5%" top="2rem">
         <FlexContainer justify="flex-end" responsiveFlex>
-          <MenuIcon onClick={() => setOpenMenu(false)}>
+          <MenuIcon as={motion.a} whileHover={{scale: 1.2}} onClick={() => setOpenMenu(false)}>
             <AiOutlineClose />
           </MenuIcon>
         </FlexContainer>
@@ -43,10 +43,15 @@ const NavMenuContainer = styled.div`
   top: 0;
   left: 0;
   height: 100vh;
-  width: 100%;
-  background-color: ${({ theme }) => theme.colors.primary_light};
+  width: 60%;
+  background: linear-gradient(
+    to bottom,
+    ${({ theme }) => theme.colors.primary_light},
+    ${({ theme }) => theme.colors.gradient}
+  );
   z-index: 1;
 `;
+
 const MenuIcon = styled.a`
   color: ${({ theme }) => theme.colors.nav};
   font-size: 1.6rem;

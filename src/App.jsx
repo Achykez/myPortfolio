@@ -4,7 +4,6 @@ import ShowCase from "./components/ShowCase";
 import MySkills from "./components/MySkills";
 import { MyProjects } from "./components/MyProjects";
 import Footer from "./components/Footer";
-import ReactSwitch from "react-switch";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { ConfigProvider, Spin } from "antd";
 
@@ -16,6 +15,7 @@ import {
   Logo, 
   Container,
   MenuIcon,
+  FadeImg
 } from "./styles/Global.styled";
 import NavMenu from "./components/layouts/NavMenu";
 import {
@@ -24,6 +24,8 @@ import {
  
 } from "./utils/Theme";
 import { Switcher } from "./components/Switcher";
+import TopFadeImage from "../src/assets/top.png"
+import LeftFadeImage from "../src/assets/left.png"
 
 function App() {
   const now = new Date();
@@ -121,6 +123,10 @@ function App() {
               <MyProjects />
               <Footer />
             </Container>
+
+            <FadeImg src={TopFadeImage} top="0" />
+            <FadeImg src={LeftFadeImage} top="30vh" />
+
           </MainBody>
         </>
       )}

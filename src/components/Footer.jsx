@@ -23,7 +23,7 @@ const Footer = () => {
   const [loading , setLoading] = useState('');
   const getCurrencyFromLocale = async (locale) => {
     try {
-      const currency = await fetch(`https://api.exchangerate-api.com/v4/latest/${locale}`);
+      const currency = await fetch(`https://app.exchangerate-api.com/activate/f98a5de2aca0ce505c72537c43/latest/${locale}`);
       const currencyData = await currency.json();
       return currencyData?.rates?.[locale]?.symbol || 'USD';
     } catch (error) {
@@ -155,7 +155,7 @@ const Footer = () => {
                 value={data.budget}
                 id="budget"
                 onChange={(e) => handle(e)}
-                type="number"
+                type="text"
                 required
                 placeholder={`Enter your budget in ${currency}`}
               />

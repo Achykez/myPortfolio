@@ -41,7 +41,7 @@ export const darkTheme = {
     stick: "#fff",
     paranormal: "#fff",
     normal: "#FFF",
-
+    gradient: "#7eadfc",
     nav: "#7eadfc",
 
     button_normal: "#fff",
@@ -122,13 +122,13 @@ export const greenTheme = {
 export const purpleTheme = {
   colors: {
     primary: "#ffff",
-    
+    gradient:"#ffff",
     primary_light: "#6E5C8D",
     secondary: "#9B7CB6",
     button_hover: "#9B7CB6",
     text1: "#000",
     text2: "#000000",
-    para_text_color: "#DCDCDC",
+    para_text_color: "#000",
     tertiary: "#4E3A66",
     stick: "#FFFFFF",
     paranormal: "#FFFFFF",

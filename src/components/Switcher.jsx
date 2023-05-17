@@ -19,6 +19,7 @@ export const Switcher = (props) => {
                   fontSize: "20px",
                   color: "aliceblue",
                   justifyContent: "center",
+                  alignItems: "center",
                 }}>
                 ☽
               </span>
@@ -30,6 +31,8 @@ export const Switcher = (props) => {
                   fontSize: "20px",
                   color: "aliceblue",
                   justifyContent: "center",
+                  alignItems: "center",
+
                 }}>
                 ✺
               </span>
