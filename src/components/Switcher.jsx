@@ -20,6 +20,7 @@ export const Switcher = (props) => {
                   color: "aliceblue",
                   justifyContent: "center",
                   alignItems: "center",
+                  marginTop: "1.5px"
                 }}>
                 ☽
               </span>
