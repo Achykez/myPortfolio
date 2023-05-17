@@ -119,10 +119,42 @@ export const greenTheme = {
     tablet: "800px",
   },
 };
+export const purpleTheme = {
+  colors: {
+    primary: "#ffff",
+    
+    primary_light: "#6E5C8D",
+    secondary: "#9B7CB6",
+    button_hover: "#9B7CB6",
+    text1: "#000",
+    text2: "#000000",
+    para_text_color: "#DCDCDC",
+    tertiary: "#4E3A66",
+    stick: "#FFFFFF",
+    paranormal: "#FFFFFF",
+    normal: "#9B7CB6",
+    nav: "#000",
+    button_normal: "#FFFFFF",
+  },
+  fonts: {
+    family: "DM sans",
+    weight: {
+      regular: 400,
+      medium: 500,
+      bold: 700,
+    },
+  },
+  breakpoints: {
+    mobile: "720px",
+    tablet: "800px",
+  },
+};
+
 
 export const themeOptions = [
   { name: "Light", theme: lightTheme },
   { name: "Dark", theme: darkTheme },
   { name: "Yellow", theme: yellowTheme },
   { name: "Green", theme: greenTheme },
+  { name: "Purple", theme: purpleTheme },
 ];
