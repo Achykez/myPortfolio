@@ -1,0 +1,83 @@
+{
+    "fixtures": [
+      {
+        "id": 1,
+        "homeTeam": "Manchester United",
+        "awayTeam": "Chelsea",
+        "date": "2024-09-01",
+        "time": "16:00",
+        "status": "Scheduled",
+        "score": null
+      },
+      {
+        "id": 2,
+        "homeTeam": "Arsenal",
+        "awayTeam": "Tottenham",
+        "date": "2024-09-10",
+        "time": "18:30",
+        "status": "Scheduled",
+        "score": null
+      },
+      {
+        "id": 3,
+        "homeTeam": "Manchester City",
+        "awayTeam": "Liverpool",
+        "date": "2024-10-05",
+        "time": "15:00",
+        "status": "Scheduled",
+        "score": null
+      },
+      {
+        "id": 4,
+        "homeTeam": "Leicester City",
+        "awayTeam": "Everton",
+        "date": "2024-10-20",
+        "time": "17:00",
+        "status": "Scheduled",
+        "score": null
+      }
+    ],
+    "results": [
+      {
+        "id": 1,
+        "homeTeam": "Liverpool",
+        "awayTeam": "Manchester United",
+        "date": "2024-08-25",
+        "score": {
+          "home": 2,
+          "away": 1
+        }
+      },
+      {
+        "id": 2,
+        "homeTeam": "Chelsea",
+        "awayTeam": "Arsenal",
+        "date": "2024-09-15",
+        "score": {
+          "home": 1,
+          "away": 1
+        }
+      },
+      {
+        "id": 3,
+        "homeTeam": "Tottenham",
+        "awayTeam": "Leicester City",
+        "date": "2024-09-29",
+        "score": {
+          "home": 3,
+          "away": 2
+        }
+      },
+      {
+        "id": 4,
+        "homeTeam": "Everton",
+        "awayTeam": "Manchester City",
+        "date": "2024-10-10",
+        "score": {
+          "home": 0,
+          "away": 0
+        }
+      }
+    ]
+  }
+  
