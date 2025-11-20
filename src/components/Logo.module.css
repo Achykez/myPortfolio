@@ -1,0 +1,30 @@
+.logoLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  cursor: pointer;
+  color: var(--color-text);
+  transition: color 0.3s ease;
+}
+
+.logoLink:hover {
+  color: var(--color-accent);
+}
+
+.logo {
+  width: 2rem;
+  height: 2rem;
+  color: currentColor;
+}
+
+.letterA,
+.letterC {
+  transition: stroke 0.3s ease;
+}
+
+.logoLink:hover .letterA,
+.logoLink:hover .letterC {
+  stroke: var(--color-accent);
+}
+
