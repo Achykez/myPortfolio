@@ -1,0 +1,73 @@
+.main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 6rem 2rem 4rem;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .main {
+    padding: 5rem 1rem 3rem;
+  }
+}
+
+.container {
+  text-align: center;
+  width: 100%;
+}
+
+.errorCode {
+  font-size: clamp(6rem, 15vw, 10rem);
+  font-weight: 700;
+  color: var(--color-accent);
+  margin: 0;
+  line-height: 1;
+  background: linear-gradient(135deg, var(--color-accent), var(--color-text));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.title {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 1rem 0 1.5rem;
+}
+
+.description {
+  font-size: clamp(1rem, 2vw, 1.125rem);
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+  max-width: 600px;
+  margin: 0 auto 2.5rem;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.homeButton {
+  display: inline-block;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  border: none;
+  background: var(--color-button);
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 500;
+  font-family: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.homeButton:hover {
+  background: var(--color-button-hover);
+}
+
