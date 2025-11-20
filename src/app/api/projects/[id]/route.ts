@@ -65,7 +65,7 @@ export async function PUT(
 
     await connectDB();
     const body: ProjectFormData = await request.json();
-    const { title, description, appUrl, githubUrl, tags } = body;
+    const { title, description, appType, appUrl, appStoreUrl, playStoreUrl, githubUrl, tags } = body;
 
     // Validation
     if (!title || !description) {
@@ -75,15 +75,33 @@ export async function PUT(
       );
     }
 
-    // Validate URLs if provided
-    if (appUrl && !isValidUrl(appUrl)) {
-      return NextResponse.json(
-        { error: 'Invalid app URL format' },
-        { status: 400 }
-      );
+    // Validate appType
+    const validAppType = appType === 'mobile' ? 'mobile' : 'web';
+
+    // Validate URLs based on app type
+    if (validAppType === 'web') {
+      if (appUrl && appUrl.trim() && !isValidUrl(appUrl)) {
+        return NextResponse.json(
+          { error: 'Invalid app URL format' },
+          { status: 400 }
+        );
+      }
+    } else {
+      if (appStoreUrl && appStoreUrl.trim() && !isValidUrl(appStoreUrl)) {
+        return NextResponse.json(
+          { error: 'Invalid App Store URL format' },
+          { status: 400 }
+        );
+      }
+      if (playStoreUrl && playStoreUrl.trim() && !isValidUrl(playStoreUrl)) {
+        return NextResponse.json(
+          { error: 'Invalid Play Store URL format' },
+          { status: 400 }
+        );
+      }
     }
 
-    if (githubUrl && !isValidUrl(githubUrl)) {
+    if (githubUrl && githubUrl.trim() && !isValidUrl(githubUrl)) {
       return NextResponse.json(
         { error: 'Invalid GitHub URL format' },
         { status: 400 }
@@ -110,7 +128,10 @@ export async function PUT(
       {
         title: title.trim(),
         description: description.trim(),
-        appUrl: appUrl?.trim() || '',
+        appType: validAppType,
+        appUrl: validAppType === 'web' ? (appUrl?.trim() || '') : '',
+        appStoreUrl: validAppType === 'mobile' ? (appStoreUrl?.trim() || '') : '',
+        playStoreUrl: validAppType === 'mobile' ? (playStoreUrl?.trim() || '') : '',
         githubUrl: githubUrl?.trim() || '',
         ...(tags !== undefined && { tags: processedTags }),
       },
@@ -137,8 +158,22 @@ export async function PUT(
     );
   } catch (error) {
     console.error('Error updating project:', error);
+    
+    // Handle Mongoose validation errors
+    if (error && typeof error === 'object' && 'name' in error && error.name === 'ValidationError') {
+      const mongooseError = error as { errors?: Record<string, { message: string }> };
+      const validationErrors = Object.values(mongooseError.errors || {}).map(
+        (err) => err.message
+      );
+      return NextResponse.json(
+        { error: `Validation error: ${validationErrors.join(', ')}` },
+        { status: 400 }
+      );
+    }
+    
+    const errorMessage = error instanceof Error ? error.message : 'Failed to update project';
     return NextResponse.json(
-      { error: 'Failed to update project' },
+      { error: errorMessage },
       { status: 500 }
     );
   }

@@ -11,7 +11,8 @@ import { useTheme } from '../../contexts/ThemeContext';
 import { Navigation } from '../../components/Navigation';
 import { TagsInput } from '../../components/TagsInput';
 import { Project} from '../../types/project';
-import { FiEdit2, FiTrash2, FiExternalLink, FiGithub } from 'react-icons/fi';
+import { FiEdit2, FiTrash2, FiExternalLink, FiGithub, FiSmartphone, FiGlobe } from 'react-icons/fi';
+import { SiAppstore, SiGoogleplay } from 'react-icons/si';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -22,7 +23,18 @@ const fadeInUp = {
 const projectFormSchema = z.object({
   title: z.string().min(1, 'Title is required'),
   description: z.string().min(1, 'Description is required'),
+  appType: z.enum(['web', 'mobile']),
   appUrl: z
+    .string()
+    .refine((val) => val === '' || z.string().url().safeParse(val).success, {
+      message: 'Please enter a valid URL',
+    }),
+  appStoreUrl: z
+    .string()
+    .refine((val) => val === '' || z.string().url().safeParse(val).success, {
+      message: 'Please enter a valid URL',
+    }),
+  playStoreUrl: z
     .string()
     .refine((val) => val === '' || z.string().url().safeParse(val).success, {
       message: 'Please enter a valid URL',
@@ -47,17 +59,23 @@ export default function AdminPage() {
     handleSubmit,
     reset,
     control,
+    watch,
     formState: { errors },
   } = useForm<ProjectFormSchemaType>({
     resolver: zodResolver(projectFormSchema),
     defaultValues: {
       title: '',
       description: '',
+      appType: 'web',
       appUrl: '',
+      appStoreUrl: '',
+      playStoreUrl: '',
       githubUrl: '',
       tags: [],
     },
   });
+
+  const appType = watch('appType');
   const [status, setStatus] = useState<{ type: 'success' | 'error' | null; message: string }>({
     type: null,
     message: '',
@@ -78,7 +96,7 @@ export default function AdminPage() {
       } else {
         setStatus({ type: 'error', message: data.error || 'Failed to fetch projects' });
       }
-    } catch (error) {
+    } catch {
       setStatus({ type: 'error', message: 'Failed to fetch projects' });
     } finally {
       setLoading(false);
@@ -113,7 +131,7 @@ export default function AdminPage() {
       } else {
         setStatus({ type: 'error', message: responseData.error || 'Failed to save project' });
       }
-    } catch (error) {
+    } catch {
       setStatus({ type: 'error', message: 'Something went wrong. Please try again.' });
     }
   };
@@ -123,7 +141,10 @@ export default function AdminPage() {
     reset({
       title: project.title,
       description: project.description,
+      appType: project.appType || 'web',
       appUrl: project.appUrl || '',
+      appStoreUrl: project.appStoreUrl || '',
+      playStoreUrl: project.playStoreUrl || '',
       githubUrl: project.githubUrl || '',
       tags: project.tags || [],
     });
@@ -145,7 +166,7 @@ export default function AdminPage() {
       } else {
         setStatus({ type: 'error', message: data.error || 'Failed to delete project' });
       }
-    } catch (error) {
+    } catch {
       setStatus({ type: 'error', message: 'Failed to delete project' });
     }
   };
@@ -155,7 +176,10 @@ export default function AdminPage() {
     reset({
       title: '',
       description: '',
+      appType: 'web',
       appUrl: '',
+      appStoreUrl: '',
+      playStoreUrl: '',
       githubUrl: '',
       tags: [],
     });
@@ -195,15 +219,77 @@ export default function AdminPage() {
               {errors.description && <ErrorMessage>{errors.description.message}</ErrorMessage>}
             </FormGroup>
             <FormGroup>
-              <Label htmlFor="appUrl">App URL (optional)</Label>
-              <Input
-                type="url"
-                id="appUrl"
-                {...register('appUrl')}
-                placeholder="https://example.com"
+              <Label htmlFor="appType">App Type *</Label>
+              <Controller
+                name="appType"
+                control={control}
+                render={({ field }) => (
+                  <AppTypeContainer>
+                    <AppTypeOption>
+                      <input
+                        type="radio"
+                        id="appType-web"
+                        value="web"
+                        checked={field.value === 'web'}
+                        onChange={() => field.onChange('web')}
+                      />
+                      <AppTypeLabel htmlFor="appType-web" $checked={field.value === 'web'}>
+                        <FiGlobe />
+                        <span>Web</span>
+                      </AppTypeLabel>
+                    </AppTypeOption>
+                    <AppTypeOption>
+                      <input
+                        type="radio"
+                        id="appType-mobile"
+                        value="mobile"
+                        checked={field.value === 'mobile'}
+                        onChange={() => field.onChange('mobile')}
+                      />
+                      <AppTypeLabel htmlFor="appType-mobile" $checked={field.value === 'mobile'}>
+                        <FiSmartphone />
+                        <span>Mobile</span>
+                      </AppTypeLabel>
+                    </AppTypeOption>
+                  </AppTypeContainer>
+                )}
               />
-              {errors.appUrl && <ErrorMessage>{errors.appUrl.message}</ErrorMessage>}
             </FormGroup>
+            {appType === 'web' ? (
+              <FormGroup>
+                <Label htmlFor="appUrl">App URL (optional)</Label>
+                <Input
+                  type="url"
+                  id="appUrl"
+                  {...register('appUrl')}
+                  placeholder="https://example.com"
+                />
+                {errors.appUrl && <ErrorMessage>{errors.appUrl.message}</ErrorMessage>}
+              </FormGroup>
+            ) : (
+              <>
+                <FormGroup>
+                  <Label htmlFor="appStoreUrl">App Store URL (optional)</Label>
+                  <Input
+                    type="url"
+                    id="appStoreUrl"
+                    {...register('appStoreUrl')}
+                    placeholder="https://apps.apple.com/app/..."
+                  />
+                  {errors.appStoreUrl && <ErrorMessage>{errors.appStoreUrl.message}</ErrorMessage>}
+                </FormGroup>
+                <FormGroup>
+                  <Label htmlFor="playStoreUrl">Play Store URL (optional)</Label>
+                  <Input
+                    type="url"
+                    id="playStoreUrl"
+                    {...register('playStoreUrl')}
+                    placeholder="https://play.google.com/store/apps/details?id=..."
+                  />
+                  {errors.playStoreUrl && <ErrorMessage>{errors.playStoreUrl.message}</ErrorMessage>}
+                </FormGroup>
+              </>
+            )}
             <FormGroup>
               <Label htmlFor="githubUrl">GitHub URL (optional)</Label>
               <Input
@@ -280,15 +366,40 @@ export default function AdminPage() {
                       </td>
                       <td>
                         <LinksContainer>
-                          {project.appUrl && (
-                            <LinkButton
-                              href={project.appUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              title="View App"
-                            >
-                              <FiExternalLink />
-                            </LinkButton>
+                          {project.appType === 'mobile' ? (
+                            <>
+                              {project.appStoreUrl && (
+                                <LinkButton
+                                  href={project.appStoreUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  title="App Store"
+                                >
+                                  <SiAppstore />
+                                </LinkButton>
+                              )}
+                              {project.playStoreUrl && (
+                                <LinkButton
+                                  href={project.playStoreUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  title="Play Store"
+                                >
+                                  <SiGoogleplay />
+                                </LinkButton>
+                              )}
+                            </>
+                          ) : (
+                            project.appUrl && (
+                              <LinkButton
+                                href={project.appUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                title="View App"
+                              >
+                                <FiExternalLink />
+                              </LinkButton>
+                            )
                           )}
                           {project.githubUrl && (
                             <LinkButton
@@ -300,9 +411,13 @@ export default function AdminPage() {
                               <FiGithub />
                             </LinkButton>
                           )}
-                          {!project.appUrl && !project.githubUrl && (
-                            <NoLinks>No links</NoLinks>
-                          )}
+                          {project.appType === 'mobile' &&
+                            !project.appStoreUrl &&
+                            !project.playStoreUrl &&
+                            !project.githubUrl && <NoLinks>No links</NoLinks>}
+                          {project.appType !== 'mobile' &&
+                            !project.appUrl &&
+                            !project.githubUrl && <NoLinks>No links</NoLinks>}
                         </LinksContainer>
                       </td>
                       <td>
@@ -698,6 +813,45 @@ const ConfirmButton = styled.button<{ $danger?: boolean }>`
 
   &:hover {
     background: ${({ $danger }) => ($danger ? '#cc0000' : 'transparent')};
+  }
+`;
+
+const AppTypeContainer = styled.div`
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+`;
+
+const AppTypeOption = styled.div`
+  flex: 1;
+  
+  input[type="radio"] {
+    display: none;
+  }
+`;
+
+const AppTypeLabel = styled.label<{ $checked?: boolean }>`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1rem;
+  border-radius: 8px;
+  border: 2px solid ${({ theme, $checked }) => ($checked ? theme.colors.accent : theme.colors.border)};
+  background: ${({ theme, $checked }) => ($checked ? `${theme.colors.accent}15` : theme.colors.bg)};
+  color: ${({ theme, $checked }) => ($checked ? theme.colors.accent : theme.colors.textSecondary)};
+  font-size: 0.95rem;
+  font-weight: ${({ theme }) => theme.fonts.weight.medium};
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  svg {
+    font-size: 1.25rem;
+  }
+
+  &:hover {
+    border-color: ${({ theme }) => theme.colors.accent};
+    background: ${({ theme, $checked }) => ($checked ? `${theme.colors.accent}15` : theme.colors.bgSecondary)};
   }
 `;
 

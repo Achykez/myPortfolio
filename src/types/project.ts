@@ -2,7 +2,10 @@ export interface Project {
   _id?: string;
   title: string;
   description: string;
+  appType?: 'web' | 'mobile';
   appUrl?: string;
+  appStoreUrl?: string;
+  playStoreUrl?: string;
   githubUrl?: string;
   tags?: string[];
   createdAt?: Date;
@@ -12,7 +15,10 @@ export interface Project {
 export interface ProjectFormData {
   title: string;
   description: string;
+  appType?: 'web' | 'mobile';
   appUrl?: string;
+  appStoreUrl?: string;
+  playStoreUrl?: string;
   githubUrl?: string;
   tags?: string[];
 }

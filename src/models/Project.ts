@@ -13,7 +13,23 @@ const ProjectSchema = new Schema<Project>(
       required: [true, 'Description is required'],
       trim: true,
     },
+    appType: {
+      type: String,
+      enum: ['web', 'mobile'],
+      default: 'web',
+      trim: true,
+    },
     appUrl: {
+      type: String,
+      trim: true,
+      default: '',
+    },
+    appStoreUrl: {
+      type: String,
+      trim: true,
+      default: '',
+    },
+    playStoreUrl: {
       type: String,
       trim: true,
       default: '',

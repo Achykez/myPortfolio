@@ -10,6 +10,7 @@ import { z } from 'zod';
 import { useTheme } from '../contexts/ThemeContext';
 import { skills, socialLinks } from '../data';
 import { Navigation } from './Navigation';
+import { ComingSoonModal } from './ComingSoonModal';
 import { Project } from '../types/project';
 import {
   FaGithub,
@@ -30,6 +31,8 @@ import {
   SiPostgresql,
   SiTailwindcss,
   SiExpress,
+  SiAppstore,
+  SiGoogleplay,
 } from 'react-icons/si';
 import { FiExternalLink, FiGithub } from 'react-icons/fi';
 
@@ -99,6 +102,10 @@ export function PageContent() {
   });
   const [projects, setProjects] = useState<Project[]>([]);
   const [projectsLoading, setProjectsLoading] = useState(true);
+  const [comingSoonModal, setComingSoonModal] = useState<{
+    isOpen: boolean;
+    storeType: 'appstore' | 'playstore';
+  }>({ isOpen: false, storeType: 'appstore' });
 
   useEffect(() => {
     fetchProjects();
@@ -244,18 +251,71 @@ export function PageContent() {
                       ))}
                     </ProjectTags>
                   )}
-                  {(project.appUrl || project.githubUrl) && (
+                  {((project.appType === 'web' && project.appUrl) ||
+                    (project.appType === 'mobile' && (project.appStoreUrl || project.playStoreUrl)) ||
+                    project.githubUrl) && (
                     <ProjectLinks>
-                      {project.appUrl && (
-                        <ProjectLink
-                          href={project.appUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          aria-label="View App"
-                        >
-                          <FiExternalLink />
-                          <span>Live App</span>
-                        </ProjectLink>
+                      {project.appType === 'web' ? (
+                        project.appUrl && (
+                          <ProjectLink
+                            href={project.appUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="View App"
+                          >
+                            <FiExternalLink />
+                            <span>Live App</span>
+                          </ProjectLink>
+                        )
+                      ) : (
+                        <>
+                          {project.appStoreUrl ? (
+                            <StoreLink
+                              href={project.appStoreUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label="Download on App Store"
+                              $storeType="appstore"
+                            >
+                              <SiAppstore />
+                              <span>App Store</span>
+                            </StoreLink>
+                          ) : (
+                            <StoreButton
+                              onClick={() =>
+                                setComingSoonModal({ isOpen: true, storeType: 'appstore' })
+                              }
+                              $storeType="appstore"
+                              aria-label="Coming soon on App Store"
+                            >
+                              <SiAppstore />
+                              <span>App Store</span>
+                            </StoreButton>
+                          )}
+                          {project.playStoreUrl ? (
+                            <StoreLink
+                              href={project.playStoreUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label="Download on Play Store"
+                              $storeType="playstore"
+                            >
+                              <SiGoogleplay />
+                              <span>Play Store</span>
+                            </StoreLink>
+                          ) : (
+                            <StoreButton
+                              onClick={() =>
+                                setComingSoonModal({ isOpen: true, storeType: 'playstore' })
+                              }
+                              $storeType="playstore"
+                              aria-label="Coming soon on Play Store"
+                            >
+                              <SiGoogleplay />
+                              <span>Play Store</span>
+                            </StoreButton>
+                          )}
+                        </>
                       )}
                       {project.githubUrl && (
                         <ProjectLink
@@ -356,6 +416,11 @@ export function PageContent() {
           </ContactForm>
         </Section>
       </Main>
+      <ComingSoonModal
+        isOpen={comingSoonModal.isOpen}
+        onClose={() => setComingSoonModal({ isOpen: false, storeType: 'appstore' })}
+        storeType={comingSoonModal.storeType}
+      />
     </StyledThemeProvider>
   );
 }
@@ -727,6 +792,66 @@ const ProjectLink = styled.a`
 
   svg {
     font-size: 1rem;
+  }
+`;
+
+const StoreLink = styled.a<{ $storeType: 'appstore' | 'playstore' }>`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: ${({ theme }) => theme.colors.accent};
+  font-size: 0.9rem;
+  font-weight: ${({ theme }) => theme.fonts.weight.medium};
+  text-decoration: none;
+  transition: all 0.3s ease;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  background: ${({ theme, $storeType }) =>
+    $storeType === 'appstore'
+      ? `${theme.colors.accent}10`
+      : `${theme.colors.accent}10`};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.buttonHover};
+    background: ${({ theme, $storeType }) =>
+      $storeType === 'appstore'
+        ? `${theme.colors.accent}20`
+        : `${theme.colors.accent}20`};
+    border-color: ${({ theme }) => theme.colors.accent};
+    transform: translateY(-2px);
+  }
+
+  svg {
+    font-size: 1.1rem;
+  }
+`;
+
+const StoreButton = styled.button<{ $storeType: 'appstore' | 'playstore' }>`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: ${({ theme }) => theme.colors.textSecondary};
+  font-size: 0.9rem;
+  font-weight: ${({ theme }) => theme.fonts.weight.medium};
+  text-decoration: none;
+  transition: all 0.3s ease;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  background: ${({ theme }) => theme.colors.bg};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  cursor: pointer;
+  font-family: inherit;
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.text};
+    background: ${({ theme }) => theme.colors.bgSecondary};
+    border-color: ${({ theme }) => theme.colors.accent};
+    transform: translateY(-2px);
+  }
+
+  svg {
+    font-size: 1.1rem;
   }
 `;
 
