@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { ThemeProvider as StyledThemeProvider } from "styled-components";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -12,6 +12,7 @@ import { skills, socialLinks } from "../data";
 import { Navigation } from "./Navigation";
 import { ComingSoonModal } from "./ComingSoonModal";
 import { ButtonSpinner } from "./ButtonSpinner";
+import { Loader } from "./Loader";
 import { Project } from "../types/project";
 import {
   FaGithub,
@@ -35,7 +36,7 @@ import {
   SiAppstore,
   SiGoogleplay,
 } from "react-icons/si";
-import { FiExternalLink, FiGithub } from "react-icons/fi";
+import { FiExternalLink, FiGithub, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
 const iconMap: Record<string, React.ReactNode> = {
   FaGithub: <FaGithub />,
@@ -169,6 +170,8 @@ export function PageContent() {
   });
   const [projects, setProjects] = useState<Project[]>([]);
   const [projectsLoading, setProjectsLoading] = useState(true);
+  const [currentProjectIndex, setCurrentProjectIndex] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [comingSoonModal, setComingSoonModal] = useState<{
     isOpen: boolean;
     storeType: "appstore" | "playstore";
@@ -178,16 +181,58 @@ export function PageContent() {
     fetchProjects();
   }, []);
 
+  useEffect(() => {
+    // Reset carousel index when projects change
+    if (projects.length === 0) {
+      setCurrentProjectIndex(0);
+      return;
+    }
+    
+    // Validate current index is within bounds
+    if (
+      currentProjectIndex >= projects.length ||
+      currentProjectIndex < 0 ||
+      !projects[currentProjectIndex]
+    ) {
+      setCurrentProjectIndex(0);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [projects]);
+
+  // Auto-slide carousel
+  useEffect(() => {
+    if (!isAutoPlaying || projects.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setCurrentProjectIndex((prev) =>
+        prev === projects.length - 1 ? 0 : prev + 1
+      );
+    }, 5000); // Auto-advance every 5 seconds
+
+    return () => clearInterval(interval);
+  }, [isAutoPlaying, projects.length]);
+
   const fetchProjects = async () => {
     try {
       setProjectsLoading(true);
+      setCurrentProjectIndex(0);
       const response = await fetch("/api/projects");
       const data = await response.json();
       if (response.ok) {
-        setProjects(data.projects || []);
+        const fetchedProjects = data.projects || [];
+        setProjects(fetchedProjects);
+        // Ensure index is valid after setting projects
+        if (fetchedProjects.length > 0) {
+          setCurrentProjectIndex(0);
+        }
+      } else {
+        setProjects([]);
+        setCurrentProjectIndex(0);
       }
     } catch (error) {
       console.error("Failed to fetch projects:", error);
+      setProjects([]);
+      setCurrentProjectIndex(0);
     } finally {
       setProjectsLoading(false);
     }
@@ -212,7 +257,7 @@ export function PageContent() {
       if (response.ok) {
         setStatus({
           type: "success",
-          message: "Message sent successfully! I&apos;ll get back to you soon.",
+          message: "Message sent successfully! I'll get back to you soon.",
         });
         reset();
       } else {
@@ -305,117 +350,179 @@ export function PageContent() {
             My Projects
           </SectionTitle>
           {projectsLoading ? (
-            <LoadingText as={motion.p} variants={fadeInUp}>
-              Loading projects...
-            </LoadingText>
+            <LoaderWrapper as={motion.div} variants={fadeInUp}>
+              <Loader size="small" />
+            </LoaderWrapper>
           ) : projects.length === 0 ? (
             <EmptyState as={motion.div} variants={fadeInUp}>
               <EmptyStateIcon>📁</EmptyStateIcon>
               <EmptyStateText>No projects to display yet.</EmptyStateText>
             </EmptyState>
+          ) : projects.length > 0 && projects[currentProjectIndex] ? (
+            <ProjectsCarouselWrapper as={motion.div} variants={fadeInUp}>
+              <CarouselContainer
+                onMouseEnter={() => setIsAutoPlaying(false)}
+                onMouseLeave={() => setIsAutoPlaying(true)}>
+                <CarouselButton
+                  onClick={() => {
+                    setIsAutoPlaying(false);
+                    setCurrentProjectIndex((prev) =>
+                      prev === 0 ? projects.length - 1 : prev - 1
+                    );
+                    setTimeout(() => setIsAutoPlaying(true), 3000);
+                  }}
+                  aria-label="Previous project"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}>
+                  <FiChevronLeft />
+                </CarouselButton>
+                <CarouselContent>
+                  <AnimatePresence mode="wait">
+                    <ProjectCard
+                      key={projects[currentProjectIndex]._id}
+                      as={motion.div}
+                      initial={{ opacity: 0, x: 100 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -100 }}
+                      transition={{ duration: 0.3 }}
+                      whileHover={{ scale: 1.02, y: -5 }}
+                      whileTap={{ scale: 0.98 }}>
+                      <ProjectTitle>{projects[currentProjectIndex].title}</ProjectTitle>
+                      <ProjectDescription>
+                        {projects[currentProjectIndex].description}
+                      </ProjectDescription>
+                      {projects[currentProjectIndex].tags &&
+                        projects[currentProjectIndex].tags.length > 0 && (
+                          <ProjectTags>
+                            {projects[currentProjectIndex].tags.map((tag, index) => (
+                              <TagBadge
+                                key={`${projects[currentProjectIndex]._id}-${tag}-${index}`}>
+                                {tag}
+                              </TagBadge>
+                            ))}
+                          </ProjectTags>
+                        )}
+                      {((projects[currentProjectIndex].appType === "web" &&
+                        projects[currentProjectIndex].appUrl) ||
+                        (projects[currentProjectIndex].appType === "mobile" &&
+                          (projects[currentProjectIndex].appStoreUrl ||
+                            projects[currentProjectIndex].playStoreUrl)) ||
+                        projects[currentProjectIndex].githubUrl) && (
+                        <ProjectLinks>
+                          {projects[currentProjectIndex].appType === "web" ? (
+                            projects[currentProjectIndex].appUrl && (
+                              <ProjectLink
+                                href={projects[currentProjectIndex].appUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="View App">
+                                <FiExternalLink />
+                                <span>Live App</span>
+                              </ProjectLink>
+                            )
+                          ) : (
+                            <>
+                              {projects[currentProjectIndex].appStoreUrl ? (
+                                <StoreLink
+                                  href={projects[currentProjectIndex].appStoreUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  aria-label="Download on App Store"
+                                  $storeType="appstore">
+                                  <SiAppstore />
+                                  <span>App Store</span>
+                                </StoreLink>
+                              ) : (
+                                <StoreButton
+                                  onClick={() =>
+                                    setComingSoonModal({
+                                      isOpen: true,
+                                      storeType: "appstore",
+                                    })
+                                  }
+                                  $storeType="appstore"
+                                  aria-label="Coming soon on App Store">
+                                  <SiAppstore />
+                                  <span>App Store</span>
+                                </StoreButton>
+                              )}
+                              {projects[currentProjectIndex].playStoreUrl ? (
+                                <StoreLink
+                                  href={projects[currentProjectIndex].playStoreUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  aria-label="Download on Play Store"
+                                  $storeType="playstore">
+                                  <SiGoogleplay />
+                                  <span>Play Store</span>
+                                </StoreLink>
+                              ) : (
+                                <StoreButton
+                                  onClick={() =>
+                                    setComingSoonModal({
+                                      isOpen: true,
+                                      storeType: "playstore",
+                                    })
+                                  }
+                                  $storeType="playstore"
+                                  aria-label="Coming soon on Play Store">
+                                  <SiGoogleplay />
+                                  <span>Play Store</span>
+                                </StoreButton>
+                              )}
+                            </>
+                          )}
+                          {projects[currentProjectIndex].githubUrl && (
+                            <ProjectLink
+                              href={projects[currentProjectIndex].githubUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label="View GitHub">
+                              <FiGithub />
+                              <span>GitHub</span>
+                            </ProjectLink>
+                          )}
+                        </ProjectLinks>
+                      )}
+                    </ProjectCard>
+                  </AnimatePresence>
+                </CarouselContent>
+                <CarouselButton
+                  onClick={() => {
+                    setIsAutoPlaying(false);
+                    setCurrentProjectIndex((prev) =>
+                      prev === projects.length - 1 ? 0 : prev + 1
+                    );
+                    setTimeout(() => setIsAutoPlaying(true), 3000);
+                  }}
+                  aria-label="Next project"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}>
+                  <FiChevronRight />
+                </CarouselButton>
+              </CarouselContainer>
+              {projects.length > 1 && (
+                <CarouselIndicators>
+                  {projects.map((_, index) => (
+                    <CarouselIndicator
+                      key={index}
+                      $active={index === currentProjectIndex}
+                      onClick={() => {
+                        setIsAutoPlaying(false);
+                        setCurrentProjectIndex(index);
+                        setTimeout(() => setIsAutoPlaying(true), 3000);
+                      }}
+                      aria-label={`Go to project ${index + 1}`}
+                    />
+                  ))}
+                </CarouselIndicators>
+              )}
+            </ProjectsCarouselWrapper>
           ) : (
-            <ProjectsGrid as={motion.div} variants={staggerContainer}>
-              {projects.map((project) => (
-                <ProjectCard
-                  key={project._id}
-                  as={motion.div}
-                  variants={fadeInUp}
-                  whileHover={{ scale: 1.02, y: -5 }}
-                  whileTap={{ scale: 0.98 }}>
-                  <ProjectTitle>{project.title}</ProjectTitle>
-                  <ProjectDescription>{project.description}</ProjectDescription>
-                  {project.tags && project.tags.length > 0 && (
-                    <ProjectTags>
-                      {project.tags.map((tag, index) => (
-                        <TagBadge key={`${project._id}-${tag}-${index}`}>
-                          {tag}
-                        </TagBadge>
-                      ))}
-                    </ProjectTags>
-                  )}
-                  {((project.appType === "web" && project.appUrl) ||
-                    (project.appType === "mobile" &&
-                      (project.appStoreUrl || project.playStoreUrl)) ||
-                    project.githubUrl) && (
-                    <ProjectLinks>
-                      {project.appType === "web" ? (
-                        project.appUrl && (
-                          <ProjectLink
-                            href={project.appUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label="View App">
-                            <FiExternalLink />
-                            <span>Live App</span>
-                          </ProjectLink>
-                        )
-                      ) : (
-                        <>
-                          {project.appStoreUrl ? (
-                            <StoreLink
-                              href={project.appStoreUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              aria-label="Download on App Store"
-                              $storeType="appstore">
-                              <SiAppstore />
-                              <span>App Store</span>
-                            </StoreLink>
-                          ) : (
-                            <StoreButton
-                              onClick={() =>
-                                setComingSoonModal({
-                                  isOpen: true,
-                                  storeType: "appstore",
-                                })
-                              }
-                              $storeType="appstore"
-                              aria-label="Coming soon on App Store">
-                              <SiAppstore />
-                              <span>App Store</span>
-                            </StoreButton>
-                          )}
-                          {project.playStoreUrl ? (
-                            <StoreLink
-                              href={project.playStoreUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              aria-label="Download on Play Store"
-                              $storeType="playstore">
-                              <SiGoogleplay />
-                              <span>Play Store</span>
-                            </StoreLink>
-                          ) : (
-                            <StoreButton
-                              onClick={() =>
-                                setComingSoonModal({
-                                  isOpen: true,
-                                  storeType: "playstore",
-                                })
-                              }
-                              $storeType="playstore"
-                              aria-label="Coming soon on Play Store">
-                              <SiGoogleplay />
-                              <span>Play Store</span>
-                            </StoreButton>
-                          )}
-                        </>
-                      )}
-                      {project.githubUrl && (
-                        <ProjectLink
-                          href={project.githubUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          aria-label="View GitHub">
-                          <FiGithub />
-                          <span>GitHub</span>
-                        </ProjectLink>
-                      )}
-                    </ProjectLinks>
-                  )}
-                </ProjectCard>
-              ))}
-            </ProjectsGrid>
+            <EmptyState as={motion.div} variants={fadeInUp}>
+              <EmptyStateIcon>📁</EmptyStateIcon>
+              <EmptyStateText>No projects to display yet.</EmptyStateText>
+            </EmptyState>
           )}
         </Section>
 
@@ -793,10 +900,11 @@ const StatusMessage = styled.div<{ $type: "success" | "error" }>`
       $type === "success" ? theme.colors.accent : "#ff4444"};
 `;
 
-const LoadingText = styled.p`
-  text-align: center;
-  color: ${({ theme }) => theme.colors.textSecondary};
-  font-size: 1rem;
+const LoaderWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem 1rem;
 `;
 
 const EmptyState = styled.div`
@@ -815,16 +923,84 @@ const EmptyStateText = styled.p`
   color: ${({ theme }) => theme.colors.textSecondary};
 `;
 
-const ProjectsGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
+const ProjectsCarouselWrapper = styled.div`
   max-width: 1000px;
   margin: 0 auto;
+`;
+
+const CarouselContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+`;
+
+const CarouselContent = styled.div`
+  flex: 1;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    grid-template-columns: 1fr;
-    gap: 1rem;
+    min-height: 350px;
+  }
+`;
+
+const CarouselButton = styled(motion.button)`
+  background: ${({ theme }) => theme.colors.card};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: ${({ theme }) => theme.colors.text};
+  font-size: 1.5rem;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.accent};
+    color: #ffffff;
+    border-color: ${({ theme }) => theme.colors.accent};
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    width: 40px;
+    height: 40px;
+    font-size: 1.25rem;
+  }
+`;
+
+const CarouselIndicators = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+`;
+
+const CarouselIndicator = styled.button<{ $active: boolean }>`
+  width: ${({ $active }) => ($active ? "24px" : "8px")};
+  height: 8px;
+  border-radius: 4px;
+  border: none;
+  background: ${({ theme, $active }) =>
+    $active ? theme.colors.accent : theme.colors.border};
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.accent};
+    width: 24px;
   }
 `;
 
