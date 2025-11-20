@@ -1,24 +1,25 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { ThemeProvider as StyledThemeProvider } from 'styled-components';
-import { motion } from 'framer-motion';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { useTheme } from '../contexts/ThemeContext';
-import { skills, socialLinks } from '../data';
-import { Navigation } from './Navigation';
-import { ComingSoonModal } from './ComingSoonModal';
-import { Project } from '../types/project';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import { ThemeProvider as StyledThemeProvider } from "styled-components";
+import { motion } from "framer-motion";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useTheme } from "../contexts/ThemeContext";
+import { skills, socialLinks } from "../data";
+import { Navigation } from "./Navigation";
+import { ComingSoonModal } from "./ComingSoonModal";
+import { ButtonSpinner } from "./ButtonSpinner";
+import { Project } from "../types/project";
 import {
   FaGithub,
   FaLinkedin,
   FaReact,
   FaNode,
   FaCss3Alt,
-} from 'react-icons/fa';
+} from "react-icons/fa";
 import {
   SiNextdotjs,
   SiTypescript,
@@ -33,8 +34,8 @@ import {
   SiExpress,
   SiAppstore,
   SiGoogleplay,
-} from 'react-icons/si';
-import { FiExternalLink, FiGithub } from 'react-icons/fi';
+} from "react-icons/si";
+import { FiExternalLink, FiGithub } from "react-icons/fi";
 
 const iconMap: Record<string, React.ReactNode> = {
   FaGithub: <FaGithub />,
@@ -72,13 +73,76 @@ const staggerContainer = {
 
 // Contact form schema
 const contactFormSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  email: z.string().email('Please enter a valid email address'),
-  message: z.string().min(1, 'Message is required'),
+  name: z.string().min(1, "Name is required"),
+  email: z.string().email("Please enter a valid email address"),
+  message: z.string().min(1, "Message is required"),
   honey: z.string().optional(),
 });
 
 type ContactFormData = z.infer<typeof contactFormSchema>;
+
+// Typing animation component
+const TypingText = ({
+  text,
+  speed = 20,
+  onComplete,
+}: {
+  text: string;
+  speed?: number;
+  onComplete?: () => void;
+}) => {
+  const [displayedText, setDisplayedText] = useState("");
+  const [showCursor, setShowCursor] = useState(true);
+  const [isComplete, setIsComplete] = useState(false);
+
+  useEffect(() => {
+    setDisplayedText("");
+    setIsComplete(false);
+    setShowCursor(true);
+    let currentIndex = 0;
+
+    const typingInterval = setInterval(() => {
+      if (currentIndex < text.length) {
+        setDisplayedText(text.slice(0, currentIndex + 1));
+        currentIndex++;
+      } else {
+        clearInterval(typingInterval);
+        setIsComplete(true);
+        if (onComplete) onComplete();
+        // Hide cursor after a delay
+        setTimeout(() => setShowCursor(false), 1000);
+      }
+    }, speed);
+
+    return () => clearInterval(typingInterval);
+  }, [text, speed, onComplete]);
+
+  // Cursor blinking animation
+  useEffect(() => {
+    const cursorInterval = setInterval(() => {
+      setShowCursor((prev) => !prev);
+    }, 530);
+
+    return () => clearInterval(cursorInterval);
+  }, []);
+
+  return (
+    <span>
+      {displayedText}
+      {!isComplete && (
+        <span
+          style={{
+            opacity: showCursor ? 1 : 0.3,
+            color: "inherit",
+            marginLeft: "2px",
+            transition: "opacity 0.3s ease",
+          }}>
+          |
+        </span>
+      )}
+    </span>
+  );
+};
 
 export function PageContent() {
   const { theme } = useTheme();
@@ -90,22 +154,25 @@ export function PageContent() {
   } = useForm<ContactFormData>({
     resolver: zodResolver(contactFormSchema),
     defaultValues: {
-      name: '',
-      email: '',
-      message: '',
-      honey: '',
+      name: "",
+      email: "",
+      message: "",
+      honey: "",
     },
   });
-  const [status, setStatus] = useState<{ type: 'success' | 'error' | null; message: string }>({
+  const [status, setStatus] = useState<{
+    type: "success" | "error" | null;
+    message: string;
+  }>({
     type: null,
-    message: '',
+    message: "",
   });
   const [projects, setProjects] = useState<Project[]>([]);
   const [projectsLoading, setProjectsLoading] = useState(true);
   const [comingSoonModal, setComingSoonModal] = useState<{
     isOpen: boolean;
-    storeType: 'appstore' | 'playstore';
-  }>({ isOpen: false, storeType: 'appstore' });
+    storeType: "appstore" | "playstore";
+  }>({ isOpen: false, storeType: "appstore" });
 
   useEffect(() => {
     fetchProjects();
@@ -114,13 +181,13 @@ export function PageContent() {
   const fetchProjects = async () => {
     try {
       setProjectsLoading(true);
-      const response = await fetch('/api/projects');
+      const response = await fetch("/api/projects");
       const data = await response.json();
       if (response.ok) {
         setProjects(data.projects || []);
       }
     } catch (error) {
-      console.error('Failed to fetch projects:', error);
+      console.error("Failed to fetch projects:", error);
     } finally {
       setProjectsLoading(false);
     }
@@ -129,13 +196,13 @@ export function PageContent() {
   const onSubmit = async (data: ContactFormData) => {
     if (data.honey) return; // Spam bot detected
 
-    setStatus({ type: null, message: '' });
+    setStatus({ type: null, message: "" });
 
     try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
+      const response = await fetch("/api/contact", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
       });
@@ -143,13 +210,23 @@ export function PageContent() {
       const responseData = await response.json();
 
       if (response.ok) {
-        setStatus({ type: 'success', message: 'Message sent successfully! I&apos;ll get back to you soon.' });
+        setStatus({
+          type: "success",
+          message: "Message sent successfully! I&apos;ll get back to you soon.",
+        });
         reset();
       } else {
-        setStatus({ type: 'error', message: responseData.error || 'Failed to send message. Please try again.' });
+        setStatus({
+          type: "error",
+          message:
+            responseData.error || "Failed to send message. Please try again.",
+        });
       }
     } catch {
-      setStatus({ type: 'error', message: 'Something went wrong. Please try again later.' });
+      setStatus({
+        type: "error",
+        message: "Something went wrong. Please try again later.",
+      });
     }
   };
 
@@ -163,12 +240,16 @@ export function PageContent() {
           as={motion.section}
           initial="hidden"
           animate="visible"
-          variants={staggerContainer}
-        >
+          variants={staggerContainer}>
           <motion.h1 variants={fadeInUp}>Achike Chude</motion.h1>
-          <motion.h2 variants={fadeInUp}>Frontend-Heavy Fullstack Developer</motion.h2>
+          <motion.h2 variants={fadeInUp}>
+            Frontend-Heavy Fullstack Mobile Developer
+          </motion.h2>
           <motion.p variants={fadeInUp}>
-            Building modern web & cross-platform experiences with Next.js, React Native, Node.js, Electron, and TypeScript.
+            <TypingText
+              text="Building modern web & cross-platform experiences with Next.js, React Native, Node.js, Electron, and TypeScript."
+              speed={50}
+            />
           </motion.p>
           <SocialLinks as={motion.div} variants={fadeInUp}>
             {socialLinks.map((link) => (
@@ -179,8 +260,7 @@ export function PageContent() {
                 rel="noopener noreferrer"
                 aria-label={link.name}
                 whileHover={{ scale: 1.1, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-              >
+                whileTap={{ scale: 0.95 }}>
                 {iconMap[link.icon]}
               </SocialLink>
             ))}
@@ -194,9 +274,10 @@ export function PageContent() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
-          variants={staggerContainer}
-        >
-          <SectionTitle as={motion.h2} variants={fadeInUp}>My Stack</SectionTitle>
+          variants={staggerContainer}>
+          <SectionTitle as={motion.h2} variants={fadeInUp}>
+            My Stack
+          </SectionTitle>
           <SkillsGrid as={motion.div} variants={staggerContainer}>
             {skills.map((skill) => (
               <SkillCard
@@ -204,8 +285,7 @@ export function PageContent() {
                 as={motion.div}
                 variants={fadeInUp}
                 whileHover={{ scale: 1.05, y: -5 }}
-                whileTap={{ scale: 0.95 }}
-              >
+                whileTap={{ scale: 0.95 }}>
                 <SkillIcon>{iconMap[skill.icon]}</SkillIcon>
                 <span>{skill.tech}</span>
               </SkillCard>
@@ -220,9 +300,10 @@ export function PageContent() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
-          variants={staggerContainer}
-        >
-          <SectionTitle as={motion.h2} variants={fadeInUp}>My Projects</SectionTitle>
+          variants={staggerContainer}>
+          <SectionTitle as={motion.h2} variants={fadeInUp}>
+            My Projects
+          </SectionTitle>
           {projectsLoading ? (
             <LoadingText as={motion.p} variants={fadeInUp}>
               Loading projects...
@@ -240,29 +321,30 @@ export function PageContent() {
                   as={motion.div}
                   variants={fadeInUp}
                   whileHover={{ scale: 1.02, y: -5 }}
-                  whileTap={{ scale: 0.98 }}
-                >
+                  whileTap={{ scale: 0.98 }}>
                   <ProjectTitle>{project.title}</ProjectTitle>
                   <ProjectDescription>{project.description}</ProjectDescription>
                   {project.tags && project.tags.length > 0 && (
                     <ProjectTags>
                       {project.tags.map((tag, index) => (
-                        <TagBadge key={`${project._id}-${tag}-${index}`}>{tag}</TagBadge>
+                        <TagBadge key={`${project._id}-${tag}-${index}`}>
+                          {tag}
+                        </TagBadge>
                       ))}
                     </ProjectTags>
                   )}
-                  {((project.appType === 'web' && project.appUrl) ||
-                    (project.appType === 'mobile' && (project.appStoreUrl || project.playStoreUrl)) ||
+                  {((project.appType === "web" && project.appUrl) ||
+                    (project.appType === "mobile" &&
+                      (project.appStoreUrl || project.playStoreUrl)) ||
                     project.githubUrl) && (
                     <ProjectLinks>
-                      {project.appType === 'web' ? (
+                      {project.appType === "web" ? (
                         project.appUrl && (
                           <ProjectLink
                             href={project.appUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            aria-label="View App"
-                          >
+                            aria-label="View App">
                             <FiExternalLink />
                             <span>Live App</span>
                           </ProjectLink>
@@ -275,19 +357,20 @@ export function PageContent() {
                               target="_blank"
                               rel="noopener noreferrer"
                               aria-label="Download on App Store"
-                              $storeType="appstore"
-                            >
+                              $storeType="appstore">
                               <SiAppstore />
                               <span>App Store</span>
                             </StoreLink>
                           ) : (
                             <StoreButton
                               onClick={() =>
-                                setComingSoonModal({ isOpen: true, storeType: 'appstore' })
+                                setComingSoonModal({
+                                  isOpen: true,
+                                  storeType: "appstore",
+                                })
                               }
                               $storeType="appstore"
-                              aria-label="Coming soon on App Store"
-                            >
+                              aria-label="Coming soon on App Store">
                               <SiAppstore />
                               <span>App Store</span>
                             </StoreButton>
@@ -298,19 +381,20 @@ export function PageContent() {
                               target="_blank"
                               rel="noopener noreferrer"
                               aria-label="Download on Play Store"
-                              $storeType="playstore"
-                            >
+                              $storeType="playstore">
                               <SiGoogleplay />
                               <span>Play Store</span>
                             </StoreLink>
                           ) : (
                             <StoreButton
                               onClick={() =>
-                                setComingSoonModal({ isOpen: true, storeType: 'playstore' })
+                                setComingSoonModal({
+                                  isOpen: true,
+                                  storeType: "playstore",
+                                })
                               }
                               $storeType="playstore"
-                              aria-label="Coming soon on Play Store"
-                            >
+                              aria-label="Coming soon on Play Store">
                               <SiGoogleplay />
                               <span>Play Store</span>
                             </StoreButton>
@@ -322,8 +406,7 @@ export function PageContent() {
                           href={project.githubUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          aria-label="View GitHub"
-                        >
+                          aria-label="View GitHub">
                           <FiGithub />
                           <span>GitHub</span>
                         </ProjectLink>
@@ -343,11 +426,27 @@ export function PageContent() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
-          variants={staggerContainer}
-        >
-          <SectionTitle as={motion.h2} variants={fadeInUp}>About Me</SectionTitle>
+          variants={staggerContainer}>
+          <SectionTitle as={motion.h2} variants={fadeInUp}>
+            About Me
+          </SectionTitle>
           <AboutText as={motion.p} variants={fadeInUp}>
-            I&apos;m a passionate developer with a love for building beautiful, performant, and accessible digital products. My journey spans frontend, backend, and cross-platform development, with a focus on modern JavaScript, TypeScript, and the React ecosystem. I thrive on learning, collaborating, and delivering impactful solutions.
+            I have a broad range of skills that enable me to tackle various web
+            and app development projects. As a FrontEnd Heavy FullStack
+            developer, I can handle all aspects of the development process, from
+            ideation and design to implementation and deployment. I have a deep
+            understanding of front-end technologies, including HTML, CSS, and
+            JavaScript, as well as popular front-end frameworks such as React
+            and Next JS. Additionally, I have experience with back-end
+            technologies like Node.js, Express, and PostgreSQL, MongoDB, React
+            Native, Electron JS, TypeScript, allowing me to develop full-stack
+            applications. I am familiar with various development tools and
+            practices, including Git, Agile methodologies, and test-driven
+            development. Overall, I am a versatile developer with a diverse set
+            of skills and a passion for creating user-friendly and engaging web
+            and app experiences. I am also a fast learner and I am always
+            looking to improve my skills and stay up to date with the latest
+            technologies.
           </AboutText>
         </Section>
 
@@ -358,45 +457,56 @@ export function PageContent() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
-          variants={staggerContainer}
-        >
-          <SectionTitle as={motion.h2} variants={fadeInUp}>Get In Touch</SectionTitle>
-          <ContactForm as={motion.form} variants={fadeInUp} onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+          variants={staggerContainer}>
+          <SectionTitle as={motion.h2} variants={fadeInUp}>
+            Get In Touch
+          </SectionTitle>
+          <ContactForm
+            as={motion.form}
+            variants={fadeInUp}
+            onSubmit={handleSubmit(onSubmit)}
+            autoComplete="off">
             <FormGroup>
               <Label htmlFor="name">Name</Label>
               <Input
                 type="text"
                 id="name"
-                {...register('name')}
+                {...register("name")}
                 placeholder="Your name"
               />
-              {errors.name && <ErrorMessage>{errors.name.message}</ErrorMessage>}
+              {errors.name && (
+                <ErrorMessage>{errors.name.message}</ErrorMessage>
+              )}
             </FormGroup>
             <FormGroup>
               <Label htmlFor="email">Email</Label>
               <Input
                 type="email"
                 id="email"
-                {...register('email')}
+                {...register("email")}
                 placeholder="your.email@example.com"
               />
-              {errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage>}
+              {errors.email && (
+                <ErrorMessage>{errors.email.message}</ErrorMessage>
+              )}
             </FormGroup>
             <FormGroup>
               <Label htmlFor="message">Message</Label>
               <Textarea
                 id="message"
-                {...register('message')}
+                {...register("message")}
                 rows={6}
                 placeholder="Your message..."
               />
-              {errors.message && <ErrorMessage>{errors.message.message}</ErrorMessage>}
+              {errors.message && (
+                <ErrorMessage>{errors.message.message}</ErrorMessage>
+              )}
             </FormGroup>
             {/* Honeypot field for spam protection */}
             <input
               type="text"
-              {...register('honey')}
-              style={{ display: 'none' }}
+              {...register("honey")}
+              style={{ display: "none" }}
               tabIndex={-1}
               autoComplete="off"
             />
@@ -404,9 +514,9 @@ export function PageContent() {
               type="submit"
               disabled={isSubmitting}
               whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              {isSubmitting ? 'Sending...' : 'Send Message'}
+              whileTap={{ scale: 0.98 }}>
+              {isSubmitting && <ButtonSpinner />}
+              {isSubmitting ? "Sending..." : "Send Message"}
             </SubmitButton>
             {status.type && (
               <StatusMessage $type={status.type}>
@@ -418,7 +528,9 @@ export function PageContent() {
       </Main>
       <ComingSoonModal
         isOpen={comingSoonModal.isOpen}
-        onClose={() => setComingSoonModal({ isOpen: false, storeType: 'appstore' })}
+        onClose={() =>
+          setComingSoonModal({ isOpen: false, storeType: "appstore" })
+        }
         storeType={comingSoonModal.storeType}
       />
     </StyledThemeProvider>
@@ -445,7 +557,11 @@ const HeroSection = styled.section`
     font-weight: ${({ theme }) => theme.fonts.weight.bold};
     color: ${({ theme }) => theme.colors.text};
     margin-bottom: 1rem;
-    background: linear-gradient(135deg, ${({ theme }) => theme.colors.accent}, ${({ theme }) => theme.colors.text});
+    background: linear-gradient(
+      135deg,
+      ${({ theme }) => theme.colors.accent},
+      ${({ theme }) => theme.colors.text}
+    );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -648,6 +764,10 @@ const SubmitButton = styled(motion.button)`
   cursor: pointer;
   transition: background 0.3s ease;
   margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 
   &:hover:not(:disabled) {
     background: ${({ theme }) => theme.colors.buttonHover};
@@ -659,20 +779,18 @@ const SubmitButton = styled(motion.button)`
   }
 `;
 
-const StatusMessage = styled.div<{ $type: 'success' | 'error' }>`
+const StatusMessage = styled.div<{ $type: "success" | "error" }>`
   padding: 1rem;
   border-radius: 8px;
   text-align: center;
   font-size: 0.95rem;
   background: ${({ theme, $type }) =>
-    $type === 'success'
-      ? `${theme.colors.accent}20`
-      : 'rgba(255, 0, 0, 0.1)'};
+    $type === "success" ? `${theme.colors.accent}20` : "rgba(255, 0, 0, 0.1)"};
   color: ${({ theme, $type }) =>
-    $type === 'success' ? theme.colors.accent : '#ff4444'};
+    $type === "success" ? theme.colors.accent : "#ff4444"};
   border: 1px solid
     ${({ theme, $type }) =>
-      $type === 'success' ? theme.colors.accent : '#ff4444'};
+      $type === "success" ? theme.colors.accent : "#ff4444"};
 `;
 
 const LoadingText = styled.p`
@@ -795,7 +913,7 @@ const ProjectLink = styled.a`
   }
 `;
 
-const StoreLink = styled.a<{ $storeType: 'appstore' | 'playstore' }>`
+const StoreLink = styled.a<{ $storeType: "appstore" | "playstore" }>`
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -807,7 +925,7 @@ const StoreLink = styled.a<{ $storeType: 'appstore' | 'playstore' }>`
   padding: 0.5rem 0.75rem;
   border-radius: 8px;
   background: ${({ theme, $storeType }) =>
-    $storeType === 'appstore'
+    $storeType === "appstore"
       ? `${theme.colors.accent}10`
       : `${theme.colors.accent}10`};
   border: 1px solid ${({ theme }) => theme.colors.border};
@@ -815,7 +933,7 @@ const StoreLink = styled.a<{ $storeType: 'appstore' | 'playstore' }>`
   &:hover {
     color: ${({ theme }) => theme.colors.buttonHover};
     background: ${({ theme, $storeType }) =>
-      $storeType === 'appstore'
+      $storeType === "appstore"
         ? `${theme.colors.accent}20`
         : `${theme.colors.accent}20`};
     border-color: ${({ theme }) => theme.colors.accent};
@@ -827,7 +945,7 @@ const StoreLink = styled.a<{ $storeType: 'appstore' | 'playstore' }>`
   }
 `;
 
-const StoreButton = styled.button<{ $storeType: 'appstore' | 'playstore' }>`
+const StoreButton = styled.button<{ $storeType: "appstore" | "playstore" }>`
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -854,4 +972,3 @@ const StoreButton = styled.button<{ $storeType: 'appstore' | 'playstore' }>`
     font-size: 1.1rem;
   }
 `;
-

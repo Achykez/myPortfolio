@@ -23,6 +23,9 @@ export const metadata: Metadata = {
     'Portfolio',
   ],
   authors: [{ name: 'Achike Chude' }],
+  icons: {
+    icon: '/images/favicon.ico',
+  },
   openGraph: {
     title: 'Achike Chude | Frontend-Heavy Fullstack Developer',
     description:

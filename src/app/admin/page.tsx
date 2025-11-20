@@ -10,6 +10,7 @@ import { z } from 'zod';
 import { useTheme } from '../../contexts/ThemeContext';
 import { Navigation } from '../../components/Navigation';
 import { TagsInput } from '../../components/TagsInput';
+import { ButtonSpinner } from '../../components/ButtonSpinner';
 import { Project} from '../../types/project';
 import { FiEdit2, FiTrash2, FiExternalLink, FiGithub, FiSmartphone, FiGlobe } from 'react-icons/fi';
 import { SiAppstore, SiGoogleplay } from 'react-icons/si';
@@ -60,7 +61,7 @@ export default function AdminPage() {
     reset,
     control,
     watch,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<ProjectFormSchemaType>({
     resolver: zodResolver(projectFormSchema),
     defaultValues: {
@@ -81,6 +82,7 @@ export default function AdminPage() {
     message: '',
   });
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
+  const [deletingProjectId, setDeletingProjectId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchProjects();
@@ -153,6 +155,7 @@ export default function AdminPage() {
 
   const handleDelete = async (id: string) => {
     try {
+      setDeletingProjectId(id);
       const response = await fetch(`/api/projects/${id}`, {
         method: 'DELETE',
       });
@@ -168,6 +171,8 @@ export default function AdminPage() {
       }
     } catch {
       setStatus({ type: 'error', message: 'Failed to delete project' });
+    } finally {
+      setDeletingProjectId(null);
     }
   };
 
@@ -315,8 +320,17 @@ export default function AdminPage() {
               />
             </FormGroup>
             <ButtonGroup>
-              <SubmitButton type="submit" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                {editingProject ? 'Update Project' : 'Create Project'}
+              <SubmitButton 
+                type="submit" 
+                disabled={isSubmitting}
+                whileHover={{ scale: 1.02 }} 
+                whileTap={{ scale: 0.98 }}
+              >
+                {isSubmitting && <ButtonSpinner />}
+                {isSubmitting 
+                  ? (editingProject ? 'Updating...' : 'Creating...') 
+                  : (editingProject ? 'Update Project' : 'Create Project')
+                }
               </SubmitButton>
               {editingProject && (
                 <CancelButton
@@ -436,11 +450,14 @@ export default function AdminPage() {
                               <ConfirmButton
                                 onClick={() => project._id && handleDelete(project._id)}
                                 $danger
+                                disabled={deletingProjectId === project._id}
                               >
-                                Yes
+                                {deletingProjectId === project._id && <ButtonSpinner />}
+                                {deletingProjectId === project._id ? 'Deleting...' : 'Yes'}
                               </ConfirmButton>
                               <CancelButton
                                 onClick={() => setDeleteConfirm(null)}
+                                disabled={deletingProjectId === project._id}
                                 style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem' }}
                               >
                                 No
@@ -450,6 +467,7 @@ export default function AdminPage() {
                             <DeleteButton
                               onClick={() => setDeleteConfirm(project._id || null)}
                               title="Delete"
+                              disabled={deletingProjectId === project._id}
                               whileHover={{ scale: 1.1 }}
                               whileTap={{ scale: 0.9 }}
                             >
@@ -600,9 +618,18 @@ const SubmitButton = styled(motion.button)`
   font-family: inherit;
   cursor: pointer;
   transition: background 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 
-  &:hover {
+  &:hover:not(:disabled) {
     background: ${({ theme }) => theme.colors.buttonHover};
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
   }
 `;
 
@@ -784,8 +811,13 @@ const DeleteButton = styled(motion.button)`
   justify-content: center;
   transition: color 0.3s ease;
 
-  &:hover {
+  &:hover:not(:disabled) {
     color: #cc0000;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 `;
 
@@ -810,9 +842,18 @@ const ConfirmButton = styled.button<{ $danger?: boolean }>`
   font-size: 0.75rem;
   cursor: pointer;
   transition: background 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
 
-  &:hover {
+  &:hover:not(:disabled) {
     background: ${({ $danger }) => ($danger ? '#cc0000' : 'transparent')};
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
   }
 `;
 
