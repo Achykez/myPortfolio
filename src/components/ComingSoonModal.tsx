@@ -4,7 +4,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiX } from 'react-icons/fi';
-import { Logo } from './Logo';
 import { useTheme } from '../contexts/ThemeContext';
 import { LogoIcon } from '@/assets';
 
