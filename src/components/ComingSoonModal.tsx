@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FiX } from 'react-icons/fi';
 import { Logo } from './Logo';
 import { useTheme } from '../contexts/ThemeContext';
+import { LogoIcon } from '@/assets';
 
 interface ComingSoonModalProps {
   isOpen: boolean;
@@ -65,7 +66,7 @@ export function ComingSoonModal({ isOpen, onClose, storeType }: ComingSoonModalP
               <FiX />
             </CloseButton>
             <LogoContainer>
-              <Logo href={undefined} />
+             <LogoIcon width={60} height={60} />
             </LogoContainer>
             <Title>Coming Soon</Title>
             <Message>
